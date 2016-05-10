@@ -21,7 +21,7 @@ public class SetDimensionsServlet extends HttpServlet{
 		resp.getWriter().println("<HTML><BODY>");
 		JSONObject obj = new JSONObject();
 		
-		if (pars.containsKey("y") && pars.containsKey("x")) {
+		if (pars.containsKey("x") && pars.containsKey("y")) {
 			try {
 				int x = Integer.valueOf(req.getParameter("x"));
 				services.OptionsServices.setX(x);

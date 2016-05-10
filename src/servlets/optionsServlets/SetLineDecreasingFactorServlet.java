@@ -11,30 +11,26 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class NbrStepsServlet extends HttpServlet {
+public class SetLineDecreasingFactorServlet extends HttpServlet{
 	
 	private static final long serialVersionUID = 1L;
-	
+
 	// TODO Changer en doPost
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		@SuppressWarnings("unchecked")
 		Map <String, String[]> pars = req.getParameterMap();
 		resp.getWriter().println("<HTML><BODY>");
-		JSONObject obj;
-		
-		if (pars.containsKey("nbrSteps")) {
-			Integer nbrSteps = Integer.valueOf(req.getParameter("nbrSteps")); 
+		JSONObject obj = new JSONObject();
+
+		if (pars.containsKey("decFactor")) {
 			try {
-				obj = services.OptionsServices.setSteps(nbrSteps);
+				obj = services.OptionsServices.setLineDecreasingFactor(Double.valueOf(req.getParameter("decFactor")));
 				resp.getWriter().println(obj.toString());
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+			resp.getWriter().println("</BODY></HTML>");
 		}
-		
-		
-		
-		
-		resp.getWriter().println("</BODY></HTML>");
 	}
+
 }

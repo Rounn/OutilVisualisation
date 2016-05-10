@@ -23,13 +23,13 @@ public class SetLineServlet extends HttpServlet {
 		JSONObject obj = new JSONObject();
 
 		if (pars.containsKey("line")) {
-		try {
-			obj = services.OptionsServices.setLine(Double.valueOf(req.getParameter("line")));
-			resp.getWriter().println(obj.toString());
-		} catch (JSONException e) {
-			e.printStackTrace();
+			try {
+				obj = services.OptionsServices.setLine(Double.valueOf(req.getParameter("line")));
+				resp.getWriter().println(obj.toString());
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			resp.getWriter().println("</BODY></HTML>");
 		}
-		resp.getWriter().println("</BODY></HTML>");
-	}
 	}
 }

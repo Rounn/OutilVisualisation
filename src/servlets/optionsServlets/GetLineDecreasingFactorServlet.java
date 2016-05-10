@@ -10,24 +10,22 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class GetCurrentStepId extends HttpServlet {
+public class GetLineDecreasingFactorServlet extends HttpServlet{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
+	// TODO Changer en doPost
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.getWriter().println("<HTML><BODY>");
-		JSONObject obj;
+		JSONObject obj = new JSONObject();
 
 		try {
-			obj = services.TimelineServices.getCurrentStepId();
+			obj = services.OptionsServices.getLineDecreasingFactor();
 			resp.getWriter().println(obj.toString());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
 		resp.getWriter().println("</BODY></HTML>");
 	}
+
 }

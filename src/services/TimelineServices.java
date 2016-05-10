@@ -8,6 +8,8 @@ import org.json.JSONObject;
 import tools.Points;
 import tools.Step;
 import tools.communication.BouchonMoteur;
+import tools.options.Attractivities;
+import tools.options.Similarities;
 
 public class TimelineServices {
 
@@ -41,11 +43,15 @@ public class TimelineServices {
 		moteur.optimizeNext(nbrSteps);
 		Step step = Step.getInstance();
 		Points points = Points.getInstance();
+		Attractivities attr = Attractivities.getInstance();
+		Similarities sims = Similarities.getInstance();
 		//Losses losses = Losses.getInstance();
 		
 		
 		step.incrementId();
 		points.addPoints(moteur.getEmbeddings());
+		attr.setAttractivities(moteur.getAttractivities(attr.getReferer()));
+		sims.setSimilarities(moteur.getAttractivities(sims.getReferer()));
 		//losses.setLosses(moteur.getLoss(), moteur.getGlobalLoss());
 		
 		

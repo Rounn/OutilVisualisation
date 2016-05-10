@@ -12,23 +12,33 @@
   
   
   
-  
+  <!-- Test -->
   <servlet>
     <servlet-name>Test</servlet-name>
     <servlet-class>servlets.TestServlet</servlet-class>
   </servlet>
-  
-   <servlet-mapping>
+  <servlet-mapping>
     <servlet-name>Test</servlet-name>
     <url-pattern>/test</url-pattern>
   </servlet-mapping>
   
+  <!-- Id -->
+  <servlet>
+    <servlet-name>getID</servlet-name>
+    <servlet-class>servlets.optionsServlets.GetCurrentStepIdServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getID</servlet-name>
+    <url-pattern>/getId</url-pattern>
+  </servlet-mapping>
+  
+  
+  <!--  Weights -->
   <servlet>
     <servlet-name>setWeights</servlet-name>
     <servlet-class>servlets.optionsServlets.WeightServlet</servlet-class>
   </servlet>
-  
-   <servlet-mapping>
+  <servlet-mapping>
     <servlet-name>setWeights</servlet-name>
     <url-pattern>/w</url-pattern>
   </servlet-mapping>
@@ -37,28 +47,177 @@
     <servlet-name>reinitWeights</servlet-name>
     <servlet-class>servlets.optionsServlets.ReinitWeightsServlet</servlet-class>
   </servlet>
-  
-   <servlet-mapping>
+  <servlet-mapping>
     <servlet-name>reinitWeights</servlet-name>
     <url-pattern>/rw</url-pattern>
   </servlet-mapping>
   
-  <servlet>
-    <servlet-name>nbrs</servlet-name>
-    <servlet-class>servlets.optionsServlets.NbrStepsServlet</servlet-class>
-  </servlet>
   
-   <servlet-mapping>
-    <servlet-name>nbrs</servlet-name>
-    <url-pattern>/nbrs</url-pattern>
+  <!-- Nbr Steps -->
+  <servlet>
+    <servlet-name>setNbrs</servlet-name>
+    <servlet-class>servlets.optionsServlets.SetNbrStepsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>setNbrs</servlet-name>
+    <url-pattern>/setnbrs</url-pattern>
   </servlet-mapping>
   
+  <!-- Dimensions -->
+  <servlet>
+    <servlet-name>getX</servlet-name>
+    <servlet-class>servlets.optionsServlets.GetDimensionXServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getX</servlet-name>
+    <url-pattern>/getX</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>setX</servlet-name>
+    <servlet-class>servlets.optionsServlets.SetDimensionXServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>setX</servlet-name>
+    <url-pattern>/setX</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+    <servlet-name>getY</servlet-name>
+    <servlet-class>servlets.optionsServlets.GetDimensionYServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getY</servlet-name>
+    <url-pattern>/getY</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>setY</servlet-name>
+    <servlet-class>servlets.optionsServlets.SetDimensionYServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>setY</servlet-name>
+    <url-pattern>/setY</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>getDimensions</servlet-name>
+    <servlet-class>servlets.optionsServlets.GetDimensionsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getDimensions</servlet-name>
+    <url-pattern>/getDimensions</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>setDimensions</servlet-name>
+    <servlet-class>servlets.optionsServlets.SetDimensionsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>setDimensions</servlet-name>
+    <url-pattern>/setDimensions</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>getTotalDimensions</servlet-name>
+    <servlet-class>servlets.optionsServlets.GetTotalDimensionsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getTotalDimensions</servlet-name>
+    <url-pattern>/getTotalDimensions</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Attractivities -->
+  <servlet>
+    <servlet-name>getAttractivities</servlet-name>
+    <servlet-class>servlets.optionsServlets.GetAttractivitiesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getAttractivities</servlet-name>
+    <url-pattern>/getAttractivities</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Similarities -->
+  <servlet>
+    <servlet-name>getSimilarities</servlet-name>
+    <servlet-class>servlets.optionsServlets.GetSimilaritiesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getSimilarities</servlet-name>
+    <url-pattern>/getSimilarities</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Loss -->
+  <servlet>
+    <servlet-name>getLoss</servlet-name>
+    <servlet-class>servlets.optionsServlets.GetLossServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getLoss</servlet-name>
+    <url-pattern>/getLoss</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>getGlobalLoss</servlet-name>
+    <servlet-class>servlets.optionsServlets.GetGlobalLossServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getGlobalLoss</servlet-name>
+    <url-pattern>/getGlobalLoss</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>reinitLoss</servlet-name>
+    <servlet-class>servlets.optionsServlets.ReinitLossServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>reinitLoss</servlet-name>
+    <url-pattern>/reinitLoss</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Line -->
+  <servlet>
+    <servlet-name>setLine</servlet-name>
+    <servlet-class>servlets.optionsServlets.SetLineServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>setLine</servlet-name>
+    <url-pattern>/setLine</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>getLastLine</servlet-name>
+    <servlet-class>servlets.optionsServlets.GetLastLineServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getLastLine</servlet-name>
+    <url-pattern>/getLastLine</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>setLineDecreasingFactor</servlet-name>
+    <servlet-class>servlets.optionsServlets.SetLineDecreasingFactorServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>setLineDecreasingFactor</servlet-name>
+    <url-pattern>/setDec</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>getLineDecreasingFactor</servlet-name>
+    <servlet-class>servlets.optionsServlets.GetLineDecreasingFactorServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getLineDecreasingFactor</servlet-name>
+    <url-pattern>/getDec</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Timeline -->
   <servlet>
     <servlet-name>next</servlet-name>
     <servlet-class>servlets.timelineServlets.NextServlet</servlet-class>
   </servlet>
-  
-   <servlet-mapping>
+  <servlet-mapping>
     <servlet-name>next</servlet-name>
     <url-pattern>/next</url-pattern>
   </servlet-mapping>
@@ -67,15 +226,9 @@
     <servlet-name>pause</servlet-name>
     <servlet-class>servlets.timelineServlets.PauseServlet</servlet-class>
   </servlet>
-  
-   <servlet-mapping>
+  <servlet-mapping>
     <servlet-name>pause</servlet-name>
     <url-pattern>/pause</url-pattern>
   </servlet-mapping>
-  
-  
-  
-  
-
   
 </web-app>

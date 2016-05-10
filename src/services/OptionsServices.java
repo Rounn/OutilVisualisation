@@ -81,7 +81,7 @@ public class OptionsServices {
 	
 	public static void setY(int y) {
 		Dimensions dims = Dimensions.getInstance();
-		dims.setX(y);
+		dims.setY(y);
 	}
 	
 	public static int getX() {
@@ -102,11 +102,12 @@ public class OptionsServices {
 	
 	/* ATTRACTIVITIES Services */
 	
-	public static JSONObject getAttractivities() throws JSONException {
+	public static JSONObject getAttractivities(String referrer) throws JSONException {
 		Attractivities att = Attractivities.getInstance();
 		BouchonMoteur moteur = new BouchonMoteur();
 		
-		att.setAttractivities(moteur.getAttractivities(att.getReferer()));
+		att.setReferer(referrer);
+		att.setAttractivities(moteur.getAttractivities(referrer));
 		return att.toJSON();
 	}
 	
@@ -169,12 +170,13 @@ public class OptionsServices {
 	
 	/* SIMILARIITIES Services */
 	
-	public static JSONObject getSimilarities() throws JSONException {
-		Similarities att = Similarities.getInstance();
+	public static JSONObject getSimilarities(String referrer) throws JSONException {
+		Similarities sims = Similarities.getInstance();
 		BouchonMoteur moteur = new BouchonMoteur();
 		
-		att.setSimilarities(moteur.getSims(att.getReferer()));
-		return att.toJSON();
+		sims.setReferer(referrer);
+		sims.setSimilarities(moteur.getSims(referrer));
+		return sims.toJSON();
 	}
 	
 	public static void setSimilarityReferer(String referer) {
@@ -191,12 +193,12 @@ public class OptionsServices {
 	/* LINE Services */
 	
 	public static JSONObject getLastLine() throws JSONException {
-		Line l = Line.getInstance();
+		//Line l = Line.getInstance();
 		BouchonMoteur moteur = new BouchonMoteur();
 		JSONObject obj = new JSONObject();
 		
-		l.setLine(moteur.getLastLine());
-		obj.put("line", l.getLine());
+		//l.setLine(moteur.getLastLine());
+		obj.put("line", moteur.getLastLine());
 		return obj;
 	}
 	
@@ -220,6 +222,14 @@ public class OptionsServices {
 		moteur.setLineDecreasingFactor(decreasingFactor);
 		obj.put("decreasingFactor", l.getDecreasingFactor());
 		return obj;
+	}
+	
+	public static JSONObject getLineDecreasingFactor() throws JSONException {
+		Line l = Line.getInstance();
+		JSONObject obj = new JSONObject();
+		
+		obj.put("decreasingFactor", l.getDecreasingFactor());
+		return obj;		
 	}
 	
 }

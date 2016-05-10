@@ -87,19 +87,19 @@ public class BouchonMoteur implements EmbeddingsModel{
 
 	@Override
 	public void setLine(double line) {
-		// TODO Auto-generated method stub
+		// Set...
 		
 	}
 
 	@Override
 	public double getLastLine() {
-		// TODO Auto-generated method stub
-		return 0;
+		Random rnd = new Random();
+		return rnd.nextDouble();
 	}
 
 	@Override
 	public void setLineDecreasingFactor(double dec) {
-		// TODO Auto-generated method stub
+		// Set...
 		
 	}
 
