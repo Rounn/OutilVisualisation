@@ -6,7 +6,7 @@ import java.util.Random;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import tools.communication.BouchonMoteur;
+import mlp.EmbeddingsModel;
 import tools.options.Attractivities;
 import tools.options.Dimensions;
 import tools.options.Line;
@@ -35,7 +35,8 @@ public class OptionsServices {
 		pw.addWeights(weights);
 		
 		//Set in the learning motor
-		BouchonMoteur moteur = new BouchonMoteur();
+		//BouchonMoteur moteur = new BouchonMoteur();
+		EmbeddingsModel moteur = services.TimelineServices.getMod();
 		moteur.setWeights(pw.getWeights());
 		obj.put("moteur", "OK");
 		obj.put("weights", pw.toJSON());
@@ -46,7 +47,8 @@ public class OptionsServices {
 	public static JSONObject reinitWeights() throws JSONException {
 		PointsWeight pw = PointsWeight.getInstance();
 		pw.reinitWeights();
-		BouchonMoteur  moteur = new BouchonMoteur();
+		//BouchonMoteur  moteur = new BouchonMoteur();
+		EmbeddingsModel moteur = services.TimelineServices.getMod();
 		moteur.setWeights(pw.getWeights());
 		return pw.toJSON();
 	}
@@ -104,7 +106,8 @@ public class OptionsServices {
 	
 	public static JSONObject getAttractivities(String referrer) throws JSONException {
 		Attractivities att = Attractivities.getInstance();
-		BouchonMoteur moteur = new BouchonMoteur();
+		//BouchonMoteur moteur = new BouchonMoteur();
+		EmbeddingsModel moteur = services.TimelineServices.getMod();
 		
 		att.setReferer(referrer);
 		att.setAttractivities(moteur.getAttractivities(referrer));
@@ -126,7 +129,8 @@ public class OptionsServices {
 	
 	public static JSONObject getLoss() throws JSONException {
 		Losses l = Losses.getInstance();
-		BouchonMoteur moteur = new BouchonMoteur();
+		//BouchonMoteur moteur = new BouchonMoteur();
+		EmbeddingsModel moteur = services.TimelineServices.getMod();
 		JSONObject obj = new JSONObject();
 		
 		l.setLoss(moteur.getLoss());
@@ -136,7 +140,8 @@ public class OptionsServices {
 	
 	public static JSONObject getGlobalLoss() throws JSONException {
 		Losses l = Losses.getInstance();
-		BouchonMoteur moteur = new BouchonMoteur();
+		//BouchonMoteur moteur = new BouchonMoteur();
+		EmbeddingsModel moteur = services.TimelineServices.getMod();
 		JSONObject obj = new JSONObject();
 		
 		l.setGlobalLoss(moteur.getGlobalLoss());
@@ -146,7 +151,8 @@ public class OptionsServices {
 	
 	public static JSONObject getLosses() throws JSONException {
 		Losses l = Losses.getInstance();
-		BouchonMoteur moteur = new BouchonMoteur();
+		//BouchonMoteur moteur = new BouchonMoteur();
+		EmbeddingsModel moteur = services.TimelineServices.getMod();
 		JSONObject obj = new JSONObject();
 		
 		l.setLoss(moteur.getGlobalLoss());
@@ -157,7 +163,8 @@ public class OptionsServices {
 	
 	public static JSONObject reinitLoss() throws JSONException {
 		Losses l = Losses.getInstance();
-		BouchonMoteur moteur = new BouchonMoteur();
+		//BouchonMoteur moteur = new BouchonMoteur();
+		EmbeddingsModel moteur = services.TimelineServices.getMod();
 		JSONObject obj = new JSONObject();
 		
 		moteur.reinitLoss();
@@ -172,7 +179,8 @@ public class OptionsServices {
 	
 	public static JSONObject getSimilarities(String referrer) throws JSONException {
 		Similarities sims = Similarities.getInstance();
-		BouchonMoteur moteur = new BouchonMoteur();
+		//BouchonMoteur moteur = new BouchonMoteur();
+		EmbeddingsModel moteur = services.TimelineServices.getMod();
 		
 		sims.setReferer(referrer);
 		sims.setSimilarities(moteur.getSims(referrer));
@@ -194,7 +202,8 @@ public class OptionsServices {
 	
 	public static JSONObject getLastLine() throws JSONException {
 		//Line l = Line.getInstance();
-		BouchonMoteur moteur = new BouchonMoteur();
+		//BouchonMoteur moteur = new BouchonMoteur();
+		EmbeddingsModel moteur = services.TimelineServices.getMod();
 		JSONObject obj = new JSONObject();
 		
 		//l.setLine(moteur.getLastLine());
@@ -204,7 +213,8 @@ public class OptionsServices {
 	
 	public static JSONObject setLine(double line) throws JSONException {
 		Line l = Line.getInstance();
-		BouchonMoteur moteur = new BouchonMoteur();
+		//BouchonMoteur moteur = new BouchonMoteur();
+		EmbeddingsModel moteur = services.TimelineServices.getMod();
 		JSONObject obj = new JSONObject();
 		
 		l.setLine(line);
@@ -215,7 +225,8 @@ public class OptionsServices {
 	
 	public static JSONObject setLineDecreasingFactor(double decreasingFactor) throws JSONException {
 		Line l = Line.getInstance();
-		BouchonMoteur moteur = new BouchonMoteur();
+		//BouchonMoteur moteur = new BouchonMoteur();
+		EmbeddingsModel moteur = services.TimelineServices.getMod();
 		JSONObject obj = new JSONObject();
 		
 		l.setDecreasingFactor(decreasingFactor);

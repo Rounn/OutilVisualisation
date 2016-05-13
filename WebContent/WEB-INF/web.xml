@@ -32,6 +32,15 @@
     <url-pattern>/getId</url-pattern>
   </servlet-mapping>
   
+  <!-- URI -->
+  <servlet>
+    <servlet-name>setURI</servlet-name>
+    <servlet-class>servlets.timelineServlets.SetURIServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>setURI</servlet-name>
+    <url-pattern>/setURI</url-pattern>
+  </servlet-mapping>
   
   <!--  Weights -->
   <servlet>

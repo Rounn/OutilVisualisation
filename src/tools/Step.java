@@ -42,8 +42,10 @@ public class Step {
 		this.sims = Similarities.getInstance();
 		this.losses = Losses.getInstance();
 		this.line = Line.getInstance();
-		this.uri = "/Users/Rani/Desktop/PLDACSave/";
+		this.uri = "../RepServeur/PLDAC";  // "/Users/Rani/Desktop/PLDACSave/"
+	
 	}
+	
 	
 	public void setURI(String uri) {
 		this.uri = uri;
