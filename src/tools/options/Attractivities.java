@@ -54,7 +54,7 @@ public class Attractivities {
 		JSONObject obj = new JSONObject();
 		JSONObject jsonAttr = new JSONObject();
 		
-		obj.put("referer", this.referer);
+		obj.put("referrer", this.referer);
 		for(Entry<String, Float> entry : this.attractivities.entrySet()) {
 			jsonAttr.put(entry.getKey(), entry.getValue());
 		}

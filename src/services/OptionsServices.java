@@ -38,8 +38,9 @@ public class OptionsServices {
 		//BouchonMoteur moteur = new BouchonMoteur();
 		EmbeddingsModel moteur = services.TimelineServices.getMod();
 		moteur.setWeights(pw.getWeights());
-		obj.put("moteur", "OK");
-		obj.put("weights", pw.toJSON());
+		obj = pw.toJSON();
+		//obj.put("moteur", "OK");
+		//obj.put("weights", pw.toJSON());
 		 
 		return obj;
 	}
@@ -64,7 +65,7 @@ public class OptionsServices {
 		ns.setSteps(steps);
 		
 		obj.put("response", "OK");
-		obj.put("steps", ns.toString());
+		obj.put("steps", ns.toJSON());
 		
 		return obj;
 	}

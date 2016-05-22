@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <!-- jquery -->
+      <script src="https://code.jquery.com/jquery-1.12.3.min.js"
+         integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+         integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+      <!-- Optional theme -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+         integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+      <!-- Latest compiled and minified JavaScript -->
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+      <!-- Plotly -->
+      <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+   </head>
+   <body>
+      <p>&nbsp;</p>
+      <div class="container-fluid" style="width:90%;margin-left:auto;margin-right:auto">
+         <div class="thumbnail">
+            <div class="row-md-2">
+               <h2>Step N# 10 Dashboard</h2>
+            </div>
+            <div class="row">
+               <div class="col-md-1">
+                  <h4>Steps</h4>
+                  <h5>Steps = --</h5>
+                  <h5>TotalSteps = --</h5>
+               </div>
+               <div class="col-md-1">
+                  <h4>Dimensions</h4>
+                  <h5>X = --</h5>
+                  <h5>Y = --</h5>
+               </div>
+               <div class="col-md-1">
+                  <h4>Loss</h4>
+                  <h5>Loss:--</h5>
+                  <h5>Global Loss:--</h5>
+               </div>
+               <div class="col-md-1">
+                  <h4>Line</h4>
+                  <h5>Line:--</h5>
+                  <h5>Decreasing Line Factor:--</h5>
+               </div>
+               <div class="col-md-2">
+                  <h4>Similarities Referrer</h4>
+                  <h5>Point1024</h5>
+               </div>
+               <div class="col-md-2">
+                  <h4>Attractivities Referrer</h4>
+                  <h5>Point40</h5>
+               </div>
+               <div class="col-md-2">
+                  <label for="exampleInputName2"># of steps:</label>
+                  <input type="number" min="0" class="form-control" id="exampleInputName2">
+                  <label for="exampleInputName3">Total of steps:</label>
+                  <input type="number" min="0" class="form-control" id="exampleInputName3">
+               </div>
+               <div class="col-md-1">
+                  <br/>
+                  <button type="button" class="btn btn-default">Previous</button>
+                  <p>&nbsp;</p>
+                  <button type="button" class="btn btn-default">Next</button><br>
+               </div>
+               <div class="col-md-1">
+                  <br/>
+                  <button type="button" class="btn btn-default">Load</button>
+                  <br/>
+                  <input type="checkbox" value="">Anchor this step.</label><br>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <div class="container-fluid">
+         <div style="width:90%;margin-left:auto;margin-right:auto;">
+            <p>&nbsp;</p>
+            <div class="thumbnail" style="min-height:600px">
+               <div class="container-fluid" id="myDiv" style="width:1500px;height:630px;margin-left:auto;margin-right:auto;"></div>
+            </div>
+            <script>
+               var trace1 = {
+                   x: [5.5, 2, 3.5, 4, 5],
+                   y: [4, 6, 7, 6, 1],
+                   mode: 'markers',
+                   type: 'scatter',
+                   name: 'Repulse',
+                   text: ['point124', 'point128', 'point894', 'point45', 'point923'],
+                   marker: { size: 12 }
+                   };
+
+                   var trace2 = {
+                   x: [1.5, 2.5, 3, 1],
+                   y: [4, 1, 3, 1],
+                   mode: 'markers',
+                   type: 'scatter',
+                   name: 'Attracts',
+                   text: ['point549', 'point330', 'point828', 'point53', 'point13'],
+                   marker: { size: 12 }
+                   };
+
+                   var trace3 = {
+                   x: [2],
+                   y: [2],
+                   mode: 'markers',
+                   type: 'scatter',
+                   name: 'Referrer',
+                   text: ['point177'],
+                   marker: { size: 12 }
+                   };
+
+                   var data = [ trace1, trace2, trace3 ];
+
+                   var layout = {
+                   xaxis: {
+                   range: [ 0.75, 5.25 ]
+                   },
+                   yaxis: {
+                   range: [0, 8]
+                   },
+                   title:'GraphPlot'
+                   };
+
+                   Plotly.newPlot('myDiv', data, layout);
+            </script>
+            <p>&nbsp;</p>
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="well h3">Options</div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-4">
+                  <div class="thumbnail" style="min-height:215px;">
+                     <h4>Dimensions</h4>
+                     <div class="form-group form-inline">
+                        <label for="exampleInputName2">X:</label>
+                        <select class="form-control">
+                           <option>1</option>
+                           <option>2</option>
+                           <option>3</option>
+                        </select>
+                     </div>
+                     <div class="form-group form-inline">
+                        <label for="exampleInputName2">Y:</label>
+                        <select class="form-control">
+                           <option>1</option>
+                           <option>2</option>
+                           <option>3</option>
+                        </select>
+                     </div>
+                     <button type="button" class="btn btn-default">Apply</button>
+                     <p>&nbsp;</p>
+                  </div>
+               </div>
+               <div class="col-md-4">
+                  <div class="thumbnail" style="min-height:215px;">
+                     <h4>Weights</h4>
+                     <div class="form-group">
+                        <div class="form-group form-inline">
+                           <label for="exampleInputName2">From :</label>
+                           <select class="form-control">
+                              <option>Point1</option>
+                              <option>Point2</option>
+                              <option>Point3</option>
+                           </select>
+                        </div>
+                        <div class="form-group form-inline">
+                           <label for="exampleInputName2">To :</label>
+                           <select class="form-control">
+                              <option>Point1</option>
+                              <option>Point2</option>
+                              <option>Point3</option>
+                           </select>
+                        </div>
+                        <button type="button" class="btn btn-default">Apply</button>
+                        <button type="button" class="btn btn-default">Reinit</button>
+                        <p>&nbsp;</p>
+                     </div>
+                  </div>
+               </div>
+               <!--div class="col-md-4">
+                  <div class="thumbnail" style="min-height:215px;">
+                    <h4>Num Of Steps</h4>
+                    <div class="form-group">
+                      <div class="form-group form-inline">
+                        <label for="exampleInputName2"># of steps:</label>
+                        <input type="number" min="0" class="form-control" id="exampleInputName2">
+                      </div>
+                      <button type="button" class="btn btn-default">Apply</button>
+                      <p>&nbsp;</p>
+                    </div>
+                  </div>
+                  </div-->
+            </div>
+            <div class="row">
+               <div class="col-md-4">
+                  <div class="thumbnail" style="min-height:215px;">
+                     <h4>Attractivities</h4>
+                     <div class="form-group">
+                        <div class="form-group form-inline">
+                           <label for="exampleInputName2">Referrer:</label>
+                           <select class="form-control">
+                              <option>Point1</option>
+                              <option>Point2</option>
+                              <option>Point3</option>
+                           </select>
+                        </div>
+                        <button type="button" class="btn btn-default">Apply</button>
+                        <p>&nbsp;</p>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4">
+                  <div class="thumbnail" style="min-height:215px;">
+                     <h4>Similarities</h4>
+                     <div class="form-group">
+                        <div class="form-group form-inline">
+                           <label for="exampleInputName2">Referrer:</label>
+                           <select class="form-control">
+                              <option>Point1</option>
+                              <option>Point2</option>
+                              <option>Point3</option>
+                           </select>
+                        </div>
+                        <button type="button" class="btn btn-default">Apply</button>
+                        <p>&nbsp;</p>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4">
+                  <div class="thumbnail" style="min-height:215px;">
+                     <h4>Line</h4>
+                     <div class="form-group form-inline">
+                        <div class="form-group">
+                           <label for="exampleInputName2">Line:</label>
+                           <input type="text" class="form-control" id="exampleInputName2">
+                        </div>
+                        <div class="form-group">
+                           <label for="exampleInputName2">Decreasing Factor:</label>
+                           <input type="text" class="form-control" id="exampleInputName2">
+                        </div>
+                        <button type="button" class="btn btn-default">Apply</button>
+                        <button type="button" class="btn btn-default">Get Last Line</button>
+                        <p>&nbsp;</p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <p>&nbsp;</p>
+         </div>
+      </div>
+   </body>
+
+   <script>
+    $( document ).ready(function() {
+      //alert("I am an alert box!");
+      window.open('init.html','Initiate your model','width=50,heigth=50');
+    });
+</script>
+
+</html>

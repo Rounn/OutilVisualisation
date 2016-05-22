@@ -1,6 +1,11 @@
 package tools.communication;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import core.Env;
 import mlp.EmbeddingsModel;
@@ -18,12 +23,9 @@ public class Model {
 		Env.setVerbose(0);                          
 		
 		MLPproj mlp=new MLPproj(""); 
-		HashMap<String,String> hargs=new HashMap<String,String>();
-		hargs.put("database", "tiny");
-		hargs.put("collection", "cascades_1");
-		hargs.put("nbDims", "2");
 		
-		mlp.setOptions(hargs);
+		//mlp.setOptions(this.hargs);
+		//this.hargs = new HashMap<String, String>();
 		
 		this.mod=mlp;
 	}
@@ -42,5 +44,21 @@ public class Model {
 	
 	public EmbeddingsModel getMod() {
 		return mod;
+	}
+	
+	public JSONObject getModelOptions() throws JSONException {
+		JSONObject obj = new JSONObject();
+		HashMap<String, String[]> hargs = this.mod.getOptions();
+		for(Entry<String, String[]> entry : hargs.entrySet()) {
+			JSONArray array = new JSONArray();
+			for(String val:entry.getValue())
+				array.put(val);
+			obj.put(entry.getKey(), array);
+		}
+		return obj;
+	}
+	
+	public void setModel(HashMap<String,String> hargs) {
+		this.getMod().setOptions(hargs);
 	}
 }

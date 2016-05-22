@@ -42,6 +42,17 @@
     <url-pattern>/setURI</url-pattern>
   </servlet-mapping>
   
+  <!-- Model Options-->
+  <servlet>
+    <servlet-name>getModelOptions</servlet-name>
+    <servlet-class>servlets.timelineServlets.GetModelServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getModelOptions</servlet-name>
+    <url-pattern>/getModelOptions</url-pattern>
+  </servlet-mapping>
+  
+  
   <!--  Weights -->
   <servlet>
     <servlet-name>setWeights</servlet-name>

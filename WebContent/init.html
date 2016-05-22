@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <!-- jquery -->
+      <script src="https://code.jquery.com/jquery-1.12.3.min.js"
+         integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+         integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+      <!-- Optional theme -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+         integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+      <!-- Latest compiled and minified JavaScript -->
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+      <!-- Plotly -->
+      <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+   </head>
+
+   <body>
+
+    <style type="text/css">
+        body { background: #f4f7f8 !important; } /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
+    </style>
+
+    <script>
+  //  $( document ).ready(function() {
+  $(document).ready(function(){
+  $("#button").click(function(){
+    document.getElementById("demo").innerHTML = date();
+    //$.getJSON("localhost:8080/OutilVisualisation/getModelOptions", null function(data) {
+      //document.getElementById('demo').innerHTML = 'lalalal';
+    });
+ });
+
+    /*$( document ).ready(function() {
+    document.getElementById('demo').innerHTML = 'lalal';
+
+    $.ajax({
+        url: "http://localhost:8080/OutilVisualisation/getModelOptions",
+        dataType: "json",
+        success: function(data) {
+          document.getElementById('demo').innerHTML = 'lalalooo';
+          var select, option;
+          // Get the raw DOM object for the select box
+          var database = document.getElementById('database');
+          var collection = document.getElementById('collection');
+          var nbdims = document.getElementById('nbdims');
+          // Clear the old options
+          database.options.length = 0;
+          collection.options.length = 0;
+          nbdims.options.length = 0;
+          // Load the new options
+          dboptions = data.database;
+          coloptions = data.collection;
+          dimoptions = data.nbDims;
+          for (index = 0; index < dboptions.length; ++index) {
+            option = dboptions[index];
+            database.options.add(new Option(option.text, option.value));
+          }
+          for (index = 0; index < coloptions.length; ++index) {
+            option = coloptions[index];
+            collection.options.add(new Option(option.text, option.value));
+          }
+          for (index = 0; index < dimoptions.length; ++index) {
+            option = dimoptions[index];
+            nbdims.options.add(new Option(option.text, option.value));
+          }
+        }
+     });
+
+   });*/
+
+        /*$.getJSON("getModelOptions", function(data) {
+            $("#database").remove();
+            $.each(data, function(){
+              $("#database").append('<option value="'+ this.value +'">'+ this.name +'</option>')
+            )
+        })*/
+    </script>
+
+     <div class="container-fluid" style="width:60%">
+       <p>&nbsp;</p>
+       <p>&nbsp;</p>
+       <div class="row-md-1">
+               <label for="exampleInputName2">Choose database:</label>
+               <select id="database" class="form-control">
+                  <option>Point1</option>
+                  <option>Point2</option>
+                  <option>Point3</option>
+               </select>
+       </div>
+       <p>&nbsp;</p>
+            <div class="row-md-1">
+               <label for="exampleInputName2">Choose collection:</label>
+               <select id="collection" class="form-control">
+                  <option>Point1</option>
+                  <option>Point2</option>
+                  <option>Point3</option>
+               </select>
+            </div>
+            <p>&nbsp;</p>
+            <div class="row-md-1">
+               <label for="exampleInputName2">Choose nbDims:</label>
+               <select id="nbdims" class="form-control">
+                  <option>Point1</option>
+                  <option>Point2</option>
+                  <option>Point3</option>
+               </select>
+            </div>
+            <p>&nbsp;</p>
+            <button id="button1" type="button" class="btn btn-default">Initiate model</button>
+            <p>&nbsp;</p><p>&nbsp;</p>
+            <p>PS: If only one value is available, it means it's the dafault value of the system.</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+       </div>
+     </div>
+
+
+
+<p id="demo"></p>
+   </body>
+</html>

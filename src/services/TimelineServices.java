@@ -1,6 +1,7 @@
 package services;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,20 +36,39 @@ public class TimelineServices {
 		return model.getMod();
 	}
 	
+	public static JSONObject getModelOptions() throws JSONException {
+		Model model = Model.getInstance();
+		return model.getModelOptions();
+	}
+	
+	public static void setModel(HashMap<String, String> hargs) {
+		Model model = Model.getInstance();
+		model.setModel(hargs);
+	}
+	
 	public static JSONObject saveCurrentStep() throws JSONException {
 
 		JSONObject obj = new JSONObject();
 		Step currentStep = Step.getInstance();
+		
 		try {
 			currentStep.save();
 			obj.put("SAVE OK", currentStep.toJSON());
 			return obj;
 		} catch (IOException | JSONException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 			obj.put("SAVE Error", e.getMessage());
 			return obj;
 		}
 
+	}
+	
+	public static JSONObject load(String path) throws IOException, JSONException {
+		Step step = Step.getInstance();
+		
+		step.load(path);
+		return step.toJSON();
 	}
 
 	public static JSONObject next() throws JSONException {

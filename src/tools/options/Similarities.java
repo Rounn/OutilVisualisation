@@ -52,13 +52,13 @@ public class Similarities {
 
 	public JSONObject toJSON() throws JSONException {
 		JSONObject obj = new JSONObject();
-		JSONObject jsonAttr = new JSONObject();
+		JSONObject jsonSims = new JSONObject();
 		
-		obj.put("referer", this.referer);
+		obj.put("referrer", this.referer);
 		for(Entry<String, Float> entry : this.similarities.entrySet()) {
-			jsonAttr.put(entry.getKey(), entry.getValue());
+			jsonSims.put(entry.getKey(), entry.getValue());
 		}
-		obj.put(this.name, jsonAttr);
+		obj.put(this.name, jsonSims);
 			
 		return obj;
 	}
