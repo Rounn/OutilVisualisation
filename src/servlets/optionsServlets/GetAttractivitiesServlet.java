@@ -21,7 +21,7 @@ public class GetAttractivitiesServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		@SuppressWarnings("unchecked")
 		Map <String, String[]> pars = req.getParameterMap();
-		resp.getWriter().println("<HTML><BODY>");
+		resp.setContentType("application/json");
 		JSONObject obj;
 
 		if (pars.containsKey("attrReferrer")) {
@@ -29,12 +29,11 @@ public class GetAttractivitiesServlet extends HttpServlet {
 			try {
 				obj = services.OptionsServices.getAttractivities(referrer);
 				resp.getWriter().println(obj.toString());
+				resp.getWriter().close();
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 		}
-
-		resp.getWriter().println("</BODY></HTML>");
 	}
 
 }

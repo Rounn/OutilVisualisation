@@ -51,6 +51,14 @@
     <servlet-name>getModelOptions</servlet-name>
     <url-pattern>/getModelOptions</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>setModelOptions</servlet-name>
+    <servlet-class>servlets.timelineServlets.SetModelServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>setModelOptions</servlet-name>
+    <url-pattern>/setModelOptions</url-pattern>
+  </servlet-mapping>
   
   
   <!--  Weights -->

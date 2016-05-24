@@ -15,59 +15,285 @@
       <!-- Plotly -->
       <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
    </head>
+   
    <body>
+   
+   		<script>
+   			var trace; var xTab = []; var yTab = []; var textTab = []; var textTabWithRef = [];
+			var flagRef = 0; var flagDim = 0;
+   			function next() {
+   				flagRef = 0;
+   				textTabWithRef = [];
+   				var totalSteps = parseInt(document.getElementById("total_steps_input").value)/parseInt(document.getElementById("nbr_steps_input").value);
+   				document.getElementById("totalsteps_dash").innerHTML ="Total = " + document.getElementById("total_steps_input").value;
+   				//document.getElementById("test2").innerHTML =document.getElementById("nbr_steps_input").value;
+   				//document.getElementById("test3").innerHTML =totalSteps;
+   				$.ajax({
+   			        type:"GET",
+   			        url: "setnbrs",
+   			        dataType: "json",
+   			        data: {"nbrSteps":parseInt(document.getElementById("nbr_steps_input").value)},
+   			        success: function (data) {
+   			    		document.getElementById("steps_dash").innerHTML = "Steps = " + data.nbrSteps ;
+   			    	},
+   			        error: function(err) {
+   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+   			        }
+   		    	});
+   				for (var i =0; i<totalSteps; i++) {
+   					$.ajax({
+   	   			        type:"GET",
+   	   			        url: "next",
+   	   			        dataType: "json",
+   	   			        success: function (data) {
+   	   			    		document.getElementById("title").innerHTML = "Step N# " + data.id + " Dashboard";
+   	   			    		document.getElementById("line_dash").innerHTML = "Line: " + parseFloat(data.line.line).toFixed(4) ;
+   			    			document.getElementById("dec_dash").innerHTML = "Decreasing Line Factor: " + parseFloat(data.line.decreasingFactor).toFixed(4) ;
+   			    			document.getElementById("loss_dash").innerHTML = "Loss : " + parseFloat(data.losses.loss).toFixed(4) ;
+   			    			document.getElementById("global_dash").innerHTML = "Global Loss  " + parseFloat(data.losses.globalLoss).toFixed(4) ;
+   			    			drawGraph(data.points);
+   			    			//pointsObj = data.points;
+   	   			    	},
+   	   			        error: function(err) {
+   	   			      		console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+   	   			        }
+   	   		    	});
+   				}
+   			}
+   				
+   				
+			function drawGraph(pointsObj) {
+				
+				xTab = pointsObj.x;
+				yTab = pointsObj.y;
+				textTab = pointsObj.name;
+   				console.log("xTab : " + xTab);
+   				console.log("yTab : " + yTab);
+				console.log("text : " + textTab);
+				
+   				trace = {
+   					x: xTab,
+   	                y: yTab,
+   	                mode: 'markers',
+   	                type: 'scatter',
+   	                text: textTab,
+   	                marker: { size: 12 }	
+   				};
+   				
+   				var data = [ trace ];
+   				
+   				var layout = {
+   	                title:'GraphPlot'
+   	            };
+
+   	            Plotly.newPlot('myDiv', data, layout);
+			}
+			
+			function refSelection() {
+				if (flagRef == 0){
+					var option;
+					var sel = document.getElementById("ref_select");
+					sel.options.length = 0;
+					for (index = 0; index < textTab.length; ++index) {
+			            option = textTab[index];
+			            sel.options.add(new Option(option, option));
+			        }
+					flagRef = 1;
+				}
+			}
+			
+			function applySims() {
+				textTabWithRef = [];
+				$.ajax({
+   			        type:"GET",
+   			        url: "getSimilarities",
+   			        dataType: "json",
+   			        data: {"simsReferrer":$( "#ref_select option:selected" ).text()},
+   			        success: function (data) {
+   			    		document.getElementById("simRef_dash").innerHTML = $("#ref_select option:selected" ).text() ;
+						simsObj = data.Similarities;	
+						for (var i=0; i < textTab.length; i++){
+							textTabWithRef[i] = textTab[i];
+						}
+						for (var obj in simsObj) {
+							for (var i=0; i < textTab.length; i++){
+								if (textTab[i]==obj){
+									textTabWithRef[i] = textTab[i] + "  Similarity: " + simsObj[obj];
+								}
+							}
+						}
+						console.log("text : " + textTabWithRef);
+						drawWithRef(textTabWithRef);
+   			    	},
+   			        error: function(err) {
+   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+   			        }
+   		    	});
+			}
+			
+			function applyAttr() {
+				textTabWithRef = [];
+				$.ajax({
+   			        type:"GET",
+   			        url: "getAttractivities",
+   			        dataType: "json",
+   			        data: {"attrReferrer":$( "#ref_select option:selected" ).text()},
+   			        success: function (data) {
+   			    		document.getElementById("attrRef_dash").innerHTML = $("#ref_select option:selected" ).text() ;
+						attrObj = data.Attractivities;	
+						for (var i=0; i < textTab.length; i++){
+							textTabWithRef[i] = textTab[i];
+						}
+						for (var obj in attrObj) {
+							for (var i=0; i < textTab.length; i++){
+								if (textTab[i]==obj){
+									textTabWithRef[i] = textTab[i] + "  Attractivity: " + attrObj[obj];
+								}
+							}
+						}
+						
+						console.log("text : " + textTabWithRef);
+						drawWithRef(textTabWithRef);
+   			    	},
+   			        error: function(err) {
+   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+   			        }
+   		    	});
+			}
+			
+			
+			function drawWithRef(tab){
+				console.log("text : " + tab);
+				
+   				traceRef = {
+   					x: xTab,
+   	                y: yTab,
+   	                mode: 'markers',
+   	                type: 'scatter',
+   	                text: tab,
+   	                marker: { size: 12 }	
+   				};
+   				
+   				var data = [ traceRef ];
+   				
+   				var layout = {
+   	                title:'GraphPlot'
+   	            };
+
+   	            Plotly.newPlot('myDiv', data, layout);
+			}
+			
+			function applyLine() {
+				console.log("Testttttt Lineeeeeee");
+				console.log(parseFloat(document.getElementById("line_input").value));
+				$.ajax({
+   			        type:"GET",
+   			        url: "setLine",
+   			        dataType: "json",
+   			        data: {"line":parseFloat(document.getElementById("line_input").value)},
+   			        success: function (data) {
+   			    		document.getElementById("line_dash").innerHTML = "Line :" + data.line;
+   			    	},
+   			        error: function(err) {
+   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+   			        }
+   		    	});
+			}
+			
+			function applyFactor() {
+				$.ajax({
+   			        type:"GET",
+   			        url: "setDec",
+   			        dataType: "json",
+   			        data: {"decFactor":parseFloat(document.getElementById("factor_input").value)},
+   			        success: function (data) {
+   			    		document.getElementById("dec_dash").innerHTML = "Global Line " + data.decreasingFactor;
+   			    	},
+   			        error: function(err) {
+   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+   			        }
+   		    	});
+			}
+			
+   			function dimSelection() {
+   				var max=xTab.length;
+   				if (flagDim == 0){
+					var option;
+					var sel = document.getElementById("x_select");
+					sel.options.length = 0;
+					for (index = 0; index < max; ++index) {
+			            option = index;
+			            sel.options.add(new Option(option, option));
+			        }
+					sel = document.getElementById("y_select");
+					sel.options.length = 0;
+					for (index = 0; index < max; ++index) {
+			            option = index;
+			            sel.options.add(new Option(option, option));
+			        }
+					flagDim = 1;
+				}
+   				
+   			}				
+   			
+   		</script>
+   		
+   		
       <p>&nbsp;</p>
       <div class="container-fluid" style="width:90%;margin-left:auto;margin-right:auto">
          <div class="thumbnail">
             <div class="row-md-2">
-               <h2>Step N# 10 Dashboard</h2>
+               <h2 id="title">Step N# Dashboard</h2>
             </div>
             <div class="row">
                <div class="col-md-1">
                   <h4>Steps</h4>
-                  <h5>Steps = --</h5>
-                  <h5>TotalSteps = --</h5>
+                  <h5 id="steps_dash">Steps = --</h5>
+                  <h5 id="totalsteps_dash">Total = --</h5>
                </div>
                <div class="col-md-1">
                   <h4>Dimensions</h4>
-                  <h5>X = --</h5>
-                  <h5>Y = --</h5>
+                  <h5 id="x_dash">X = 1</h5>
+                  <h5 id="y_dash">Y = 2</h5>
                </div>
                <div class="col-md-1">
                   <h4>Loss</h4>
-                  <h5>Loss:--</h5>
-                  <h5>Global Loss:--</h5>
+                  <h5 id="loss_dash">Loss:--</h5>
+                  <h5 id="global_dash">Global Loss--</h5>
                </div>
                <div class="col-md-1">
                   <h4>Line</h4>
-                  <h5>Line:--</h5>
-                  <h5>Decreasing Line Factor:--</h5>
+                  <h5 id="line_dash">Line:--</h5>
+                  <h5 id="dec_dash">Decreasing Line Factor:--</h5>
                </div>
                <div class="col-md-2">
                   <h4>Similarities Referrer</h4>
-                  <h5>Point1024</h5>
+                  <h5 id="simRef_dash">--</h5>
                </div>
                <div class="col-md-2">
                   <h4>Attractivities Referrer</h4>
-                  <h5>Point40</h5>
+                  <h5 id="attrRef_dash">--</h5>
                </div>
                <div class="col-md-2">
                   <label for="exampleInputName2"># of steps:</label>
-                  <input type="number" min="0" class="form-control" id="exampleInputName2">
+                  <input type="number" min="0" class="form-control" id="nbr_steps_input">
                   <label for="exampleInputName3">Total of steps:</label>
-                  <input type="number" min="0" class="form-control" id="exampleInputName3">
+                  <input type="number" min="0" class="form-control" id="total_steps_input">
                </div>
                <div class="col-md-1">
                   <br/>
                   <button type="button" class="btn btn-default">Previous</button>
                   <p>&nbsp;</p>
-                  <button type="button" class="btn btn-default">Next</button><br>
+                  <button id="next_button" type="button" class="btn btn-default" onclick="next()">Next</button><br>
                </div>
                <div class="col-md-1">
                   <br/>
                   <button type="button" class="btn btn-default">Load</button>
-                  <br/>
-                  <input type="checkbox" value="">Anchor this step.</label><br>
+                  <!--br/>
+                  <input type="checkbox" value="">Anchor this step.</label><br-->
+                  <p id="test"></p>
+                  <p id="test2"></p>
+                  <p id="test3"></p>
                </div>
             </div>
          </div>
@@ -81,36 +307,12 @@
             </div>
             <script>
                var trace1 = {
-                   x: [5.5, 2, 3.5, 4, 5],
-                   y: [4, 6, 7, 6, 1],
                    mode: 'markers',
                    type: 'scatter',
-                   name: 'Repulse',
-                   text: ['point124', 'point128', 'point894', 'point45', 'point923'],
                    marker: { size: 12 }
                    };
 
-                   var trace2 = {
-                   x: [1.5, 2.5, 3, 1],
-                   y: [4, 1, 3, 1],
-                   mode: 'markers',
-                   type: 'scatter',
-                   name: 'Attracts',
-                   text: ['point549', 'point330', 'point828', 'point53', 'point13'],
-                   marker: { size: 12 }
-                   };
-
-                   var trace3 = {
-                   x: [2],
-                   y: [2],
-                   mode: 'markers',
-                   type: 'scatter',
-                   name: 'Referrer',
-                   text: ['point177'],
-                   marker: { size: 12 }
-                   };
-
-                   var data = [ trace1, trace2, trace3 ];
+                   var data = [trace1];
 
                    var layout = {
                    xaxis: {
@@ -136,18 +338,14 @@
                      <h4>Dimensions</h4>
                      <div class="form-group form-inline">
                         <label for="exampleInputName2">X:</label>
-                        <select class="form-control">
-                           <option>1</option>
-                           <option>2</option>
-                           <option>3</option>
+                        <select class="form-control" id="x_select" onclick="dimSelection()">
+                           <option>--</option>
                         </select>
                      </div>
                      <div class="form-group form-inline">
                         <label for="exampleInputName2">Y:</label>
-                        <select class="form-control">
-                           <option>1</option>
-                           <option>2</option>
-                           <option>3</option>
+                        <select class="form-control" id="y_select" onclick="dimSelection()">
+                           <option>--</option>
                         </select>
                      </div>
                      <button type="button" class="btn btn-default">Apply</button>
@@ -195,36 +393,33 @@
                   </div-->
             </div>
             <div class="row">
-               <div class="col-md-4">
+               <!--div class="col-md-4">
                   <div class="thumbnail" style="min-height:215px;">
                      <h4>Attractivities</h4>
                      <div class="form-group">
                         <div class="form-group form-inline">
                            <label for="exampleInputName2">Referrer:</label>
-                           <select class="form-control">
-                              <option>Point1</option>
-                              <option>Point2</option>
-                              <option>Point3</option>
+                           <select class="form-control" id="attr_select" onclick="attrSelection()">
+                              <option>--</option>
                            </select>
                         </div>
-                        <button type="button" class="btn btn-default">Apply</button>
+                        <button type="button" class="btn btn-default" onclick="applyAttrRef()">Apply</button>
                         <p>&nbsp;</p>
                      </div>
                   </div>
-               </div>
+               </div-->
                <div class="col-md-4">
                   <div class="thumbnail" style="min-height:215px;">
-                     <h4>Similarities</h4>
+                     <h4>Attractivities & Similarities</h4>
                      <div class="form-group">
                         <div class="form-group form-inline">
                            <label for="exampleInputName2">Referrer:</label>
-                           <select class="form-control">
-                              <option>Point1</option>
-                              <option>Point2</option>
-                              <option>Point3</option>
+                           <select class="form-control" id="ref_select" onclick="refSelection()">
+                              <option>--</option>
                            </select>
                         </div>
-                        <button type="button" class="btn btn-default">Apply</button>
+                        <button type="button" class="btn btn-default" onclick="applySims()">ShowSimilarities</button>
+                        <button type="button" class="btn btn-default" onclick="applyAttr()">ShowAttractivities</button>
                         <p>&nbsp;</p>
                      </div>
                   </div>
@@ -235,14 +430,14 @@
                      <div class="form-group form-inline">
                         <div class="form-group">
                            <label for="exampleInputName2">Line:</label>
-                           <input type="text" class="form-control" id="exampleInputName2">
+                           <input type="text" class="form-control" id="line_input">
                         </div>
                         <div class="form-group">
                            <label for="exampleInputName2">Decreasing Factor:</label>
-                           <input type="text" class="form-control" id="exampleInputName2">
+                           <input type="text" class="form-control" id="factor_input">
                         </div>
-                        <button type="button" class="btn btn-default">Apply</button>
-                        <button type="button" class="btn btn-default">Get Last Line</button>
+                        <button type="button" class="btn btn-default" onclick="applyLine()">Apply Line</button>
+                        <button type="button" class="btn btn-default" onclick="applyFactor()">Apply Decreasing Factor</button>
                         <p>&nbsp;</p>
                      </div>
                   </div>
@@ -255,7 +450,6 @@
 
    <script>
     $( document ).ready(function() {
-      //alert("I am an alert box!");
       window.open('init.html','Initiate your model','width=50,heigth=50');
     });
 </script>

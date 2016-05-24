@@ -23,59 +23,74 @@
     </style>
 
     <script>
-  //  $( document ).ready(function() {
-  $(document).ready(function(){
-  $("#button").click(function(){
-    document.getElementById("demo").innerHTML = date();
-    //$.getJSON("localhost:8080/OutilVisualisation/getModelOptions", null function(data) {
-      //document.getElementById('demo').innerHTML = 'lalalal';
-    });
- });
-
-    /*$( document ).ready(function() {
-    document.getElementById('demo').innerHTML = 'lalal';
-
-    $.ajax({
-        url: "http://localhost:8080/OutilVisualisation/getModelOptions",
-        dataType: "json",
-        success: function(data) {
-          document.getElementById('demo').innerHTML = 'lalalooo';
-          var select, option;
-          // Get the raw DOM object for the select box
-          var database = document.getElementById('database');
-          var collection = document.getElementById('collection');
-          var nbdims = document.getElementById('nbdims');
-          // Clear the old options
-          database.options.length = 0;
-          collection.options.length = 0;
-          nbdims.options.length = 0;
-          // Load the new options
-          dboptions = data.database;
-          coloptions = data.collection;
-          dimoptions = data.nbDims;
-          for (index = 0; index < dboptions.length; ++index) {
-            option = dboptions[index];
-            database.options.add(new Option(option.text, option.value));
-          }
-          for (index = 0; index < coloptions.length; ++index) {
-            option = coloptions[index];
-            collection.options.add(new Option(option.text, option.value));
-          }
-          for (index = 0; index < dimoptions.length; ++index) {
-            option = dimoptions[index];
-            nbdims.options.add(new Option(option.text, option.value));
-          }
+    function getAjax() {
+    	//document.getElementById("demo").innerHTML = "Send ok";
+	    $.ajax({
+	        type:"GET",
+	        url: "getModelOptions",
+	        dataType: "json",
+	        success: function (data) {
+	    		document.getElementById("demo").innerHTML = "AJAX YESSSS";
+	    		parse(data);
+	    	},
+	        	/*function(data) {
+	          document.getElementById("demo").innerHTML = "YESSSS";
+	          alert(data);
+	        },*/
+	        error: function(err) {
+	        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+	        }
+    });}
+    function parse (data) {
+    	document.getElementById("demo").innerHTML = " parse YESSSS";
+    	//var obj = JSON.parse(data);
+    	document.getElementById("demo2").innerHTML = data.nbDims[0];
+    	var option;
+    	var dbselect = document.getElementById('database');
+        var collselect = document.getElementById('collection');
+        var dimsselect = document.getElementById('nbdims');
+        dbselect.options.length = 0;
+        collselect.options.length = 0;
+        dimsselect.options.length = 0;
+        for (index = 0; index < data.database.length; ++index) {
+            option = data.database[index];
+            dbselect.options.add(new Option(option, option));
         }
-     });
-
-   });*/
-
-        /*$.getJSON("getModelOptions", function(data) {
-            $("#database").remove();
-            $.each(data, function(){
-              $("#database").append('<option value="'+ this.value +'">'+ this.name +'</option>')
-            )
-        })*/
+        for (index = 0; index < data.collection.length; ++index) {
+            option = data.collection[index];
+            collselect.options.add(new Option(option, option));
+        }
+        for (index = 0; index < data.nbDims.length; ++index) {
+            option = data.nbDims[index];
+            dimsselect.options.add(new Option(option, option));
+        }
+    }
+    
+    function setAjax() {
+    	document.getElementById("demo").innerHTML = $( "#database option:selected" ).text();
+	    $.ajax({
+	        type:"GET",
+	        url: "setModelOptions",
+	        data: {
+	        		"database": $( "#database option:selected" ).text(),
+	        		"nbDims": $( "#nbdims option:selected" ).text(),
+	        		"collection": $( "#collection option:selected" ).text()
+	        },
+	        dataType: "json",
+	        success: function (data) {
+	    		document.getElementById("demo").innerHTML = "AJAX SET YESSSS";
+	    		//alert("The system is ready to run..");
+	    		//self.close();
+	    		var daddy = window.self;
+	    		daddy.opener = window.self;
+	    		daddy.close();
+	    	},
+	        error: function(err) {
+	        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+	        }
+    	});
+	}
+    	
     </script>
 
      <div class="container-fluid" style="width:60%">
@@ -83,32 +98,26 @@
        <p>&nbsp;</p>
        <div class="row-md-1">
                <label for="exampleInputName2">Choose database:</label>
-               <select id="database" class="form-control">
-                  <option>Point1</option>
-                  <option>Point2</option>
-                  <option>Point3</option>
+               <select id="database" class="form-control" onclick="getAjax()">
+                  <option>Please choose an option.</option>
                </select>
        </div>
        <p>&nbsp;</p>
             <div class="row-md-1">
                <label for="exampleInputName2">Choose collection:</label>
                <select id="collection" class="form-control">
-                  <option>Point1</option>
-                  <option>Point2</option>
-                  <option>Point3</option>
+                  <option id='op2'>Please choose an option.</option>
                </select>
             </div>
             <p>&nbsp;</p>
             <div class="row-md-1">
                <label for="exampleInputName2">Choose nbDims:</label>
                <select id="nbdims" class="form-control">
-                  <option>Point1</option>
-                  <option>Point2</option>
-                  <option>Point3</option>
+                  <option id='op3'>Please choose an option.</option>
                </select>
             </div>
             <p>&nbsp;</p>
-            <button id="button1" type="button" class="btn btn-default">Initiate model</button>
+            <button id="button1" type="button" class="btn btn-default" onclick="setAjax()">Initiate model</button>
             <p>&nbsp;</p><p>&nbsp;</p>
             <p>PS: If only one value is available, it means it's the dafault value of the system.</p>
             <p>&nbsp;</p>
@@ -119,5 +128,6 @@
 
 
 <p id="demo"></p>
+<p id="demo2"></p>
    </body>
 </html>

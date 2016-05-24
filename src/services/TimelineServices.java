@@ -11,6 +11,8 @@ import tools.Points;
 import tools.Step;
 import tools.communication.Model;
 import tools.options.Attractivities;
+import tools.options.Line;
+import tools.options.Losses;
 import tools.options.Similarities;
 
 public class TimelineServices {
@@ -53,10 +55,9 @@ public class TimelineServices {
 		
 		try {
 			currentStep.save();
-			obj.put("SAVE OK", currentStep.toJSON());
+			obj=currentStep.toJSON();
 			return obj;
 		} catch (IOException | JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			obj.put("SAVE Error", e.getMessage());
 			return obj;
@@ -81,14 +82,16 @@ public class TimelineServices {
 		Points points = Points.getInstance();
 		Attractivities attr = Attractivities.getInstance();
 		Similarities sims = Similarities.getInstance();
-		//Losses losses = Losses.getInstance();
+		Losses losses = Losses.getInstance();
+		Line line = Line.getInstance();
 		
 		
 		step.incrementId();
 		points.addPoints(moteur.getEmbeddings());
 		attr.setAttractivities(moteur.getAttractivities(attr.getReferer()));
 		sims.setSimilarities(moteur.getAttractivities(sims.getReferer()));
-		//losses.setLosses(moteur.getLoss(), moteur.getGlobalLoss());
+		losses.setLosses(moteur.getLoss(), moteur.getGlobalLoss());
+		line.setLine(moteur.getLastLine());
 		
 		
 		return TimelineServices.saveCurrentStep();

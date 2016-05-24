@@ -16,18 +16,14 @@ public class GetModelServlet extends HttpServlet{
 	// TODO Changer en doPost
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("application/json");
-		//resp.getWriter().println("<HTML><BODY>");
 
 		JSONObject obj;
 		try {
 			obj = services.TimelineServices.getModelOptions();
-			resp.getWriter().println(obj);
+			resp.getWriter().print(obj);
 			resp.getWriter().close();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
-
-		//resp.getWriter().println("</BODY></HTML>");
 	}
 }

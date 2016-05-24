@@ -19,7 +19,7 @@ public class NextServlet extends HttpServlet {
 	// TODO Changer en doPost
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		resp.getWriter().println("<HTML><BODY>");
+		resp.setContentType("application/json");
 		JSONObject obj = new JSONObject();
 		try {
 			obj = TimelineServices.next();
@@ -33,9 +33,8 @@ public class NextServlet extends HttpServlet {
 				e1.printStackTrace();
 			}
 		}
-		
-		resp.getWriter().println(obj.toString());
-		resp.getWriter().println("</BODY></HTML>");
+		System.out.println(obj.toString());
+		resp.getWriter().print(obj.toString());
 	}
 
 }

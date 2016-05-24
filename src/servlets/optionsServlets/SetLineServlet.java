@@ -19,17 +19,19 @@ public class SetLineServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		@SuppressWarnings("unchecked")
 		Map <String, String[]> pars = req.getParameterMap();
-		resp.getWriter().println("<HTML><BODY>");
+		resp.setContentType("application/json");
 		JSONObject obj = new JSONObject();
 
 		if (pars.containsKey("line")) {
 			try {
+				System.out.println("Test req" + Double.valueOf(req.getParameter("line")));
 				obj = services.OptionsServices.setLine(Double.valueOf(req.getParameter("line")));
-				resp.getWriter().println(obj.toString());
+				System.out.println(obj.toString());
+				resp.getWriter().print(obj.toString());
+				resp.getWriter().close();
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			resp.getWriter().println("</BODY></HTML>");
 		}
 	}
 }

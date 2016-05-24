@@ -19,22 +19,18 @@ public class SetNbrStepsServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		@SuppressWarnings("unchecked")
 		Map <String, String[]> pars = req.getParameterMap();
-		resp.getWriter().println("<HTML><BODY>");
+		resp.setContentType("application/json");
 		JSONObject obj;
 		
 		if (pars.containsKey("nbrSteps")) {
-			Integer nbrSteps = Integer.valueOf(req.getParameter("nbrSteps")); 
+			Integer nbrSteps = Integer.valueOf(req.getParameter("nbrSteps"));
 			try {
 				obj = services.OptionsServices.setSteps(nbrSteps);
-				resp.getWriter().println(obj.toString());
+				resp.getWriter().print(obj.toString());
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 		}
 		
-		
-		
-		
-		resp.getWriter().println("</BODY></HTML>");
 	}
 }

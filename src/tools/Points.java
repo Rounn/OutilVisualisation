@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,11 +52,22 @@ public class Points {
 	}
 	
 	public JSONObject toJSON() throws JSONException {
-		
 		JSONObject jsonPoints = new JSONObject();
+		JSONArray x = new JSONArray();
+		JSONArray y = new JSONArray();
+		JSONArray name = new JSONArray();
+		
 		for(Entry<String, float[]> entry : this.embeddings.entrySet()) {
-			jsonPoints.put(entry.getKey(), entry.getValue());
+			name.put(entry.getKey());
+			x.put(entry.getValue()[0]);
+			y.put(entry.getValue()[1]);
 		}
+		jsonPoints.put("x", x);
+		jsonPoints.put("y", y);
+		jsonPoints.put("name", name);
+		/*for(Entry<String, float[]> entry : this.embeddings.entrySet()) {
+			jsonPoints.put(entry.getKey(), entry.getValue());
+		}*/
 		return jsonPoints;
 	}
 

@@ -9,7 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class SetModelServlets extends HttpServlet {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class SetModelServlet extends HttpServlet {
 	/**
 	 * 
 	 */
@@ -18,9 +21,10 @@ public class SetModelServlets extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		@SuppressWarnings("unchecked")
 		Map <String, String[]> pars = req.getParameterMap();
-		resp.getWriter().println("<HTML><BODY>");
+		resp.setContentType("application/json");
 		
 		if (pars.containsKey("nbDims")&&pars.containsKey("collection")&&pars.containsKey("database")) {
+			JSONObject obj = new JSONObject();
 			String nbDims = req.getParameter("nbDims");
 			String collection = req.getParameter("collection");
 			String database = req.getParameter("database");
@@ -31,11 +35,15 @@ public class SetModelServlets extends HttpServlet {
 			
 			services.TimelineServices.setModel(hargs);
 			
+			try {
+				obj.put("STATUS", "OK");
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+			resp.getWriter().print(obj);
+			resp.getWriter().close();
+			
 		}
-		
-		
-		
-		
-		resp.getWriter().println("</BODY></HTML>");
 	}
 }

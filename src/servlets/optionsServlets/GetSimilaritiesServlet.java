@@ -21,20 +21,18 @@ public class GetSimilaritiesServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		@SuppressWarnings("unchecked")
 		Map <String, String[]> pars = req.getParameterMap();
-		resp.getWriter().println("<HTML><BODY>");
-		JSONObject obj;
+		resp.setContentType("application/json");
+		JSONObject obj = new JSONObject();
 		
 		if (pars.containsKey("simsReferrer")) {
 			String referrer = req.getParameter("simsReferrer");
 			try {
 				obj = services.OptionsServices.getSimilarities(referrer);
-				resp.getWriter().println(obj.toString());
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 		}
-
-		resp.getWriter().println("</BODY></HTML>");
+		resp.getWriter().print(obj.toString());
 	}
 
 }

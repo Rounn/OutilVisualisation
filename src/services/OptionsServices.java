@@ -64,8 +64,7 @@ public class OptionsServices {
 		
 		ns.setSteps(steps);
 		
-		obj.put("response", "OK");
-		obj.put("steps", ns.toJSON());
+		obj = ns.toJSON();
 		
 		return obj;
 	}

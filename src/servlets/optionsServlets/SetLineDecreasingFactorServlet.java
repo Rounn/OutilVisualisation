@@ -19,17 +19,18 @@ public class SetLineDecreasingFactorServlet extends HttpServlet{
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		@SuppressWarnings("unchecked")
 		Map <String, String[]> pars = req.getParameterMap();
-		resp.getWriter().println("<HTML><BODY>");
+		resp.setContentType("application/json");
 		JSONObject obj = new JSONObject();
 
 		if (pars.containsKey("decFactor")) {
 			try {
 				obj = services.OptionsServices.setLineDecreasingFactor(Double.valueOf(req.getParameter("decFactor")));
-				resp.getWriter().println(obj.toString());
+				System.out.println(obj.toString());
+				resp.getWriter().print(obj.toString());
+				resp.getWriter().close();
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			resp.getWriter().println("</BODY></HTML>");
 		}
 	}
 
