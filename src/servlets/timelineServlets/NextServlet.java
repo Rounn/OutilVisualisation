@@ -33,6 +33,11 @@ public class NextServlet extends HttpServlet {
 				e1.printStackTrace();
 			}
 		}
+		try {
+		    Thread.sleep(1000);                 //1000 milliseconds is one second.
+		} catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		}
 		System.out.println(obj.toString());
 		resp.getWriter().print(obj.toString());
 	}

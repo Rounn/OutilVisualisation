@@ -8,7 +8,6 @@
          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
       <!-- Optional theme -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
-      
          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
       <!-- Latest compiled and minified JavaScript -->
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
@@ -41,10 +40,8 @@
    			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
    			        }
    		    	});
-   				
    				for (var i =0; i<totalSteps; i++) {
-   					//var timeoutID;
-   					/*$.ajax({
+   					$.ajax({
    	   			        type:"GET",
    	   			        url: "next",
    	   			        dataType: "json",
@@ -60,33 +57,8 @@
    	   			        error: function(err) {
    	   			      		console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
    	   			        }
-   	   		    	}).delay(500);*/
-   	   		    	
-   	   		  		nextAjax();
+   	   		    	});
    				}
-   			}
-   			
-   			function nextAjax() {
-   				//sleep();
-  				$.ajax({
-   			        type:"GET",
-   			        url: "next",
-   			        dataType: "json",
-   			        success: function (data) {
-   			    		document.getElementById("title").innerHTML = "Step N# " + data.id + " Dashboard";
-   			    		document.getElementById("line_dash").innerHTML = "Line: " + parseFloat(data.line.line).toFixed(4) ;
-		    			document.getElementById("dec_dash").innerHTML = "Decreasing Line Factor: " + parseFloat(data.line.decreasingFactor).toFixed(4) ;
-		    			document.getElementById("loss_dash").innerHTML = "Loss : " + parseFloat(data.losses.loss).toFixed(4) ;
-		    			document.getElementById("global_dash").innerHTML = "Global Loss  " + parseFloat(data.losses.globalLoss).toFixed(4) ;
-		    			
-		    			drawGraph(data.points);
-		    			
-		    			//pointsObj = data.points;
-   			    	},
-   			        error: function(err) {
-   			      		console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-   			        }
-   		    	});
    			}
    				
    				
@@ -105,7 +77,7 @@
    	                mode: 'markers',
    	                type: 'scatter',
    	                text: textTab,
-   	                marker: { size: 4 }	
+   	                marker: { size: 12 }	
    				};
    				
    				var data = [ trace ];
@@ -113,23 +85,8 @@
    				var layout = {
    	                title:'GraphPlot'
    	            };
-   	            
+
    	            Plotly.newPlot('myDiv', data, layout);
-   	            
-   	            myDiv.on('plotly_click', function(data){
-    			var pts = '';
-    			for(var i=0; i < data.points.length; i++){
-    				
-        			pts = pointsObj.name[xTab.indexOf(data.points[i].x)] + '\n x = '+data.points[i].x +'\ny = '+
-            		data.points[i].y.toPrecision(4) + '\n\n';
-            		applyAttrandSims2(pointsObj.name[xTab.indexOf(data.points[i].x)]) 
-            		
-    			}
-    			alert('Closest point clicked:\n\n'+pts);
-    			
-    			
-    			
-				});
 			}
 			
 			function refSelection() {
@@ -204,176 +161,6 @@
    		    	});
 			}
 			
-			function applyAttrandSims() {
-				textTabWithRef = [];
-				$.ajax({
-   			        type:"GET",
-   			        url: "getSimilarities",
-   			        dataType: "json",
-   			        data: {"simsReferrer":$( "#ref_select option:selected" ).text()},
-   			        success: function (data) {
-   			    		document.getElementById("simRef_dash").innerHTML = $("#ref_select option:selected" ).text() ;
-						simsObj = data.Similarities;	
-						for (var i=0; i < textTab.length; i++){
-							textTabWithRef[i] = textTab[i];
-						}
-						for (var obj in simsObj) {
-							for (var i=0; i < textTab.length; i++){
-								if (textTab[i]==obj){
-									textTabWithRef[i] = textTab[i] + "  Similarity: " + simsObj[obj];
-								}
-							}
-						}
-   			    	},
-   			        error: function(err) {
-   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-   			        }
-   		    	});
-   		    	textTabWithRef2 = [];
-   		    	$.ajax({
-   			        type:"GET",
-   			        url: "getAttractivities",
-   			        dataType: "json",
-   			        data: {"attrReferrer":$( "#ref_select option:selected" ).text()},
-   			        success: function (data) {
-   			    		document.getElementById("attrRef_dash").innerHTML = $("#ref_select option:selected" ).text() ;
-						attrObj = data.Attractivities;	
-						for (var i=0; i < textTab.length; i++){
-							textTabWithRef2[i] = textTab[i];
-						}
-						for (var obj in attrObj) {
-							for (var i=0; i < textTab.length; i++){
-								if (textTab[i]==obj){
-									textTabWithRef2[i] = textTab[i] + "  Attractivity: " + attrObj[obj];
-								}
-							}
-						}
-						
-						//console.log("text : " + textTabWithRef);
-						drawWith2Ref(textTabWithRef,textTabWithRef2);
-   			    	},
-   			        error: function(err) {
-   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-   			        }
-   		    	});
-			
-			}
-			
-			
-			function applyAttrandSims2(int) {
-				textTabWithRef = [];
-				$.ajax({
-   			        type:"GET",
-   			        url: "getSimilarities",
-   			        dataType: "json",
-   			        data: {"simsReferrer":int},
-   			        success: function (data) {
-   			    		document.getElementById("simRef_dash").innerHTML = int ;
-						simsObj = data.Similarities;	
-						for (var i=0; i < textTab.length; i++){
-							textTabWithRef[i] = textTab[i];
-						}
-						for (var obj in simsObj) {
-							for (var i=0; i < textTab.length; i++){
-								if (textTab[i]==obj){
-									textTabWithRef[i] = textTab[i] + "  Similarity: " + simsObj[obj];
-								}
-							}
-						}
-   			    	},
-   			        error: function(err) {
-   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-   			        }
-   		    	});
-   		    	textTabWithRef2 = [];
-   		    	$.ajax({
-   			        type:"GET",
-   			        url: "getAttractivities",
-   			        dataType: "json",
-   			        data: {"attrReferrer":int},
-   			        success: function (data) {
-   			    		document.getElementById("attrRef_dash").innerHTML = int ;
-						attrObj = data.Attractivities;	
-						for (var i=0; i < textTab.length; i++){
-							textTabWithRef2[i] = textTab[i];
-						}
-						for (var obj in attrObj) {
-							for (var i=0; i < textTab.length; i++){
-								if (textTab[i]==obj){
-									textTabWithRef2[i] = textTab[i] + "  Attractivity: " + attrObj[obj];
-								}
-							}
-						}
-						
-						//console.log("text : " + textTabWithRef);
-						drawWith2Ref(textTabWithRef,textTabWithRef2);
-   			    	},
-   			        error: function(err) {
-   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-   			        }
-   		    	});
-			
-			}
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			function drawWith2Ref(tab,tab2){
-				console.log("text : " + tab.concat(tab2));
-				
-				text3 = new Array(tab.length);
-				for ( i =0 ;i<tab2.length;i++){
-				  if(tab[i]!=undefined){
-				     if(tab2[i]!=undefined){
-				      text3[i] = tab[i] +tab2[i];
-				     }else{
-				      text3[i] = tab[i];
-				     }
-				  }else{
-				    if(tab2[i]!=undefined){
-				      text3[i] = tab2[i];
-				    }
-  				  }
-				}
-				console.log(text3) 
-				
-				traceRef = {
-   					x: xTab,
-   	                y: yTab,
-   	                mode: 'markers',
-   	                type: 'scatter',
-   	                text: text3,
-   	                marker: { size: 4 }	
-   				};
-   				
-   				var data = [ traceRef ];
-   				
-   				var layout = {
-   	                title:'GraphPlot'
-   	            };
-
-   	            Plotly.newPlot('myDiv', data, layout);
-   	            myDiv.on('plotly_click', function(data){
-    			var pts = '';
-    			for(var i=0; i < data.points.length; i++){
-    				
-        			pts = text3[xTab.indexOf(data.points[i].x)].charAt(0) + '\n x = '+data.points[i].x +'\ny = '+
-            		data.points[i].y.toPrecision(4) + '\n\n';
-            		applyAttrandSims2(text3[xTab.indexOf(data.points[i].x)].charAt(0)) ;
-            		
-    			}
-    			alert('Closest point clicked:\n\n'+pts);			
-				});
-   	            
-   	            
-			}
-			
-			
 			
 			function drawWithRef(tab){
 				console.log("text : " + tab);
@@ -384,7 +171,7 @@
    	                mode: 'markers',
    	                type: 'scatter',
    	                text: tab,
-   	                marker: { size: 4 }	
+   	                marker: { size: 12 }	
    				};
    				
    				var data = [ traceRef ];
@@ -394,17 +181,6 @@
    	            };
 
    	            Plotly.newPlot('myDiv', data, layout);
-   	            myDiv.on('plotly_click', function(data){
-    			var pts = '';
-    			for(var i=0; i < data.points.length; i++){
-    				
-        			pts = pointsObj.name[xTab.indexOf(data.points[i].x)].charAt(0) + '\n x = '+data.points[i].x +'\ny = '+
-            		data.points[i].y.toPrecision(4) + '\n\n';
-            		applyAttrandSims2(pointsObj.name[xTab.indexOf(data.points[i].x)].charAt(0)) 
-            		
-    			}
-    			alert('Closest point clicked:\n\n'+pts);			
-				});
 			}
 			
 			function applyLine() {
@@ -431,7 +207,7 @@
    			        dataType: "json",
    			        data: {"decFactor":parseFloat(document.getElementById("factor_input").value)},
    			        success: function (data) {
-   			    		document.getElementById("dec_dash").innerHTML = "Line decreasing factor " + data.decreasingFactor;
+   			    		document.getElementById("dec_dash").innerHTML = "Global Line " + data.decreasingFactor;
    			    	},
    			        error: function(err) {
    			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
@@ -533,7 +309,7 @@
                var trace1 = {
                    mode: 'markers',
                    type: 'scatter',
-                   marker: { size: 9 }
+                   marker: { size: 12 }
                    };
 
                    var data = [trace1];
@@ -644,7 +420,6 @@
                         </div>
                         <button type="button" class="btn btn-default" onclick="applySims()">ShowSimilarities</button>
                         <button type="button" class="btn btn-default" onclick="applyAttr()">ShowAttractivities</button>
-                        <button type="button" class="btn btn-default" onclick="applyAttrandSims()">ShowAttractivities&Similarities</button>
                         <p>&nbsp;</p>
                      </div>
                   </div>

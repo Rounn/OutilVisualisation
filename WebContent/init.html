@@ -23,28 +23,35 @@
     </style>
 
     <script>
+    var flag = 0;
+    
     function getAjax() {
     	//document.getElementById("demo").innerHTML = "Send ok";
-	    $.ajax({
-	        type:"GET",
-	        url: "getModelOptions",
-	        dataType: "json",
-	        success: function (data) {
-	    		document.getElementById("demo").innerHTML = "AJAX YESSSS";
-	    		parse(data);
-	    	},
-	        	/*function(data) {
-	          document.getElementById("demo").innerHTML = "YESSSS";
-	          alert(data);
-	        },*/
-	        error: function(err) {
-	        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-	        }
-    });}
+    	if (flag == 0) {
+		    $.ajax({
+		        type:"GET",
+		        url: "getModelOptions",
+		        dataType: "json",
+		        success: function (data) {
+		    		//document.getElementById("demo").innerHTML = "AJAX YESSSS";
+		    		parse(data);
+		    	},
+		        	/*function(data) {
+		          document.getElementById("demo").innerHTML = "YESSSS";
+		          alert(data);
+		        },*/
+		        error: function(err) {
+		        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+		        }
+	    	});
+		    flag = 1;
+    		}
+    }
+    
     function parse (data) {
-    	document.getElementById("demo").innerHTML = " parse YESSSS";
+    	//document.getElementById("demo").innerHTML = " parse YESSSS";
     	//var obj = JSON.parse(data);
-    	document.getElementById("demo2").innerHTML = data.nbDims[0];
+    	//document.getElementById("demo2").innerHTML = data.nbDims[0];
     	var option;
     	var dbselect = document.getElementById('database');
         var collselect = document.getElementById('collection');
@@ -67,7 +74,7 @@
     }
     
     function setAjax() {
-    	document.getElementById("demo").innerHTML = $( "#database option:selected" ).text();
+    	//document.getElementById("demo").innerHTML = $( "#database option:selected" ).text();
 	    $.ajax({
 	        type:"GET",
 	        url: "setModelOptions",
@@ -78,7 +85,7 @@
 	        },
 	        dataType: "json",
 	        success: function (data) {
-	    		document.getElementById("demo").innerHTML = "AJAX SET YESSSS";
+	    		//document.getElementById("demo").innerHTML = "AJAX SET YESSSS";
 	    		//alert("The system is ready to run..");
 	    		//self.close();
 	    		var daddy = window.self;
@@ -127,7 +134,7 @@
 
 
 
-<p id="demo"></p>
-<p id="demo2"></p>
+<!-- p id="demo"></p>
+<p id="demo2"></p-->
    </body>
 </html>
