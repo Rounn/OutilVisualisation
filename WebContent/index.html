@@ -15,454 +15,35 @@
          integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
       <!-- Plotly -->
       <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+      <script src="functions.js"></script>
+      <script src="init_functions.js"></script>
+      
+      <!-- script>
+      $(document).ready(function() {
+        $('.overlay').overlay();
+      });
+    </script -->
+    <!-- link rel="stylesheet" href="dist/overlay.css"-->
+    <style>
+    	#overlay {
+		    position: fixed;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    height: 100%;
+		    background-color: #f4f7f8;
+		    filter:alpha(opacity=50);
+		    -moz-opacity: 0.5;
+		    -khtml-opacity: 0.5;
+		    opacity: 1;
+		    z-index: 10000;
+		}
+    </style>
    </head>
    
-   <body>
    
-   		<script>
-   			var trace; var xTab = []; var yTab = []; var textTab = []; var textTabWithRef = [];
-			var flagRef = 0; var flagDim = 0;
-   			function next() {
-   				flagRef = 0;
-   				textTabWithRef = [];
-   				var totalSteps = parseInt(document.getElementById("total_steps_input").value)/parseInt(document.getElementById("nbr_steps_input").value);
-   				document.getElementById("totalsteps_dash").innerHTML ="Total = " + document.getElementById("total_steps_input").value;
-   				//document.getElementById("test2").innerHTML =document.getElementById("nbr_steps_input").value;
-   				//document.getElementById("test3").innerHTML =totalSteps;
-   				$.ajax({
-   			        type:"GET",
-   			        url: "setnbrs",
-   			        dataType: "json",
-   			        data: {"nbrSteps":parseInt(document.getElementById("nbr_steps_input").value)},
-   			        success: function (data) {
-   			    		document.getElementById("steps_dash").innerHTML = "Steps = " + data.nbrSteps ;
-   			    	},
-   			        error: function(err) {
-   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-   			        }
-   		    	});
-   				
-   				for (var i =0; i<totalSteps; i++) {
-   					//var timeoutID;
-   					/*$.ajax({
-   	   			        type:"GET",
-   	   			        url: "next",
-   	   			        dataType: "json",
-   	   			        success: function (data) {
-   	   			    		document.getElementById("title").innerHTML = "Step N# " + data.id + " Dashboard";
-   	   			    		document.getElementById("line_dash").innerHTML = "Line: " + parseFloat(data.line.line).toFixed(4) ;
-   			    			document.getElementById("dec_dash").innerHTML = "Decreasing Line Factor: " + parseFloat(data.line.decreasingFactor).toFixed(4) ;
-   			    			document.getElementById("loss_dash").innerHTML = "Loss : " + parseFloat(data.losses.loss).toFixed(4) ;
-   			    			document.getElementById("global_dash").innerHTML = "Global Loss  " + parseFloat(data.losses.globalLoss).toFixed(4) ;
-   			    			drawGraph(data.points);
-   			    			//pointsObj = data.points;
-   	   			    	},
-   	   			        error: function(err) {
-   	   			      		console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-   	   			        }
-   	   		    	}).delay(500);*/
-   	   		    	
-   	   		  		nextAjax();
-   				}
-   			}
-   			
-   			function nextAjax() {
-   				//sleep();
-  				$.ajax({
-   			        type:"GET",
-   			        url: "next",
-   			        dataType: "json",
-   			        success: function (data) {
-   			    		document.getElementById("title").innerHTML = "Step N# " + data.id + " Dashboard";
-   			    		document.getElementById("line_dash").innerHTML = "Line: " + parseFloat(data.line.line).toFixed(4) ;
-		    			document.getElementById("dec_dash").innerHTML = "Decreasing Line Factor: " + parseFloat(data.line.decreasingFactor).toFixed(4) ;
-		    			document.getElementById("loss_dash").innerHTML = "Loss : " + parseFloat(data.losses.loss).toFixed(4) ;
-		    			document.getElementById("global_dash").innerHTML = "Global Loss  " + parseFloat(data.losses.globalLoss).toFixed(4) ;
-		    			
-		    			drawGraph(data.points);
-		    			
-		    			//pointsObj = data.points;
-   			    	},
-   			        error: function(err) {
-   			      		console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-   			        }
-   		    	});
-   			}
-   				
-   				
-			function drawGraph(pointsObj) {
-				
-				xTab = pointsObj.x;
-				yTab = pointsObj.y;
-				textTab = pointsObj.name;
-   				console.log("xTab : " + xTab);
-   				console.log("yTab : " + yTab);
-				console.log("text : " + textTab);
-				
-   				trace = {
-   					x: xTab,
-   	                y: yTab,
-   	                mode: 'markers',
-   	                type: 'scatter',
-   	                text: textTab,
-   	                marker: { size: 4 }	
-   				};
-   				
-   				var data = [ trace ];
-   				
-   				var layout = {
-   	                title:'GraphPlot'
-   	            };
-   	            
-   	            Plotly.newPlot('myDiv', data, layout);
-   	            
-   	            myDiv.on('plotly_click', function(data){
-    			var pts = '';
-    			for(var i=0; i < data.points.length; i++){
-    				
-        			pts = pointsObj.name[xTab.indexOf(data.points[i].x)] + '\n x = '+data.points[i].x +'\ny = '+
-            		data.points[i].y.toPrecision(4) + '\n\n';
-            		applyAttrandSims2(pointsObj.name[xTab.indexOf(data.points[i].x)]) 
-            		
-    			}
-    			alert('Closest point clicked:\n\n'+pts);
-    			
-    			
-    			
-				});
-			}
-			
-			function refSelection() {
-				if (flagRef == 0){
-					var option;
-					var sel = document.getElementById("ref_select");
-					sel.options.length = 0;
-					for (index = 0; index < textTab.length; ++index) {
-			            option = textTab[index];
-			            sel.options.add(new Option(option, option));
-			        }
-					flagRef = 1;
-				}
-			}
-			
-			function applySims() {
-				textTabWithRef = [];
-				$.ajax({
-   			        type:"GET",
-   			        url: "getSimilarities",
-   			        dataType: "json",
-   			        data: {"simsReferrer":$( "#ref_select option:selected" ).text()},
-   			        success: function (data) {
-   			    		document.getElementById("simRef_dash").innerHTML = $("#ref_select option:selected" ).text() ;
-						simsObj = data.Similarities;	
-						for (var i=0; i < textTab.length; i++){
-							textTabWithRef[i] = textTab[i];
-						}
-						for (var obj in simsObj) {
-							for (var i=0; i < textTab.length; i++){
-								if (textTab[i]==obj){
-									textTabWithRef[i] = textTab[i] + "  Similarity: " + simsObj[obj];
-								}
-							}
-						}
-						console.log("text : " + textTabWithRef);
-						drawWithRef(textTabWithRef);
-   			    	},
-   			        error: function(err) {
-   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-   			        }
-   		    	});
-			}
-			
-			function applyAttr() {
-				textTabWithRef = [];
-				$.ajax({
-   			        type:"GET",
-   			        url: "getAttractivities",
-   			        dataType: "json",
-   			        data: {"attrReferrer":$( "#ref_select option:selected" ).text()},
-   			        success: function (data) {
-   			    		document.getElementById("attrRef_dash").innerHTML = $("#ref_select option:selected" ).text() ;
-						attrObj = data.Attractivities;	
-						for (var i=0; i < textTab.length; i++){
-							textTabWithRef[i] = textTab[i];
-						}
-						for (var obj in attrObj) {
-							for (var i=0; i < textTab.length; i++){
-								if (textTab[i]==obj){
-									textTabWithRef[i] = textTab[i] + "  Attractivity: " + attrObj[obj];
-								}
-							}
-						}
-						
-						console.log("text : " + textTabWithRef);
-						drawWithRef(textTabWithRef);
-   			    	},
-   			        error: function(err) {
-   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-   			        }
-   		    	});
-			}
-			
-			function applyAttrandSims() {
-				textTabWithRef = [];
-				$.ajax({
-   			        type:"GET",
-   			        url: "getSimilarities",
-   			        dataType: "json",
-   			        data: {"simsReferrer":$( "#ref_select option:selected" ).text()},
-   			        success: function (data) {
-   			    		document.getElementById("simRef_dash").innerHTML = $("#ref_select option:selected" ).text() ;
-						simsObj = data.Similarities;	
-						for (var i=0; i < textTab.length; i++){
-							textTabWithRef[i] = textTab[i];
-						}
-						for (var obj in simsObj) {
-							for (var i=0; i < textTab.length; i++){
-								if (textTab[i]==obj){
-									textTabWithRef[i] = textTab[i] + "  Similarity: " + simsObj[obj];
-								}
-							}
-						}
-   			    	},
-   			        error: function(err) {
-   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-   			        }
-   		    	});
-   		    	textTabWithRef2 = [];
-   		    	$.ajax({
-   			        type:"GET",
-   			        url: "getAttractivities",
-   			        dataType: "json",
-   			        data: {"attrReferrer":$( "#ref_select option:selected" ).text()},
-   			        success: function (data) {
-   			    		document.getElementById("attrRef_dash").innerHTML = $("#ref_select option:selected" ).text() ;
-						attrObj = data.Attractivities;	
-						for (var i=0; i < textTab.length; i++){
-							textTabWithRef2[i] = textTab[i];
-						}
-						for (var obj in attrObj) {
-							for (var i=0; i < textTab.length; i++){
-								if (textTab[i]==obj){
-									textTabWithRef2[i] = textTab[i] + "  Attractivity: " + attrObj[obj];
-								}
-							}
-						}
-						
-						//console.log("text : " + textTabWithRef);
-						drawWith2Ref(textTabWithRef,textTabWithRef2);
-   			    	},
-   			        error: function(err) {
-   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-   			        }
-   		    	});
-			
-			}
-			
-			
-			function applyAttrandSims2(int) {
-				textTabWithRef = [];
-				$.ajax({
-   			        type:"GET",
-   			        url: "getSimilarities",
-   			        dataType: "json",
-   			        data: {"simsReferrer":int},
-   			        success: function (data) {
-   			    		document.getElementById("simRef_dash").innerHTML = int ;
-						simsObj = data.Similarities;	
-						for (var i=0; i < textTab.length; i++){
-							textTabWithRef[i] = textTab[i];
-						}
-						for (var obj in simsObj) {
-							for (var i=0; i < textTab.length; i++){
-								if (textTab[i]==obj){
-									textTabWithRef[i] = textTab[i] + "  Similarity: " + simsObj[obj];
-								}
-							}
-						}
-   			    	},
-   			        error: function(err) {
-   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-   			        }
-   		    	});
-   		    	textTabWithRef2 = [];
-   		    	$.ajax({
-   			        type:"GET",
-   			        url: "getAttractivities",
-   			        dataType: "json",
-   			        data: {"attrReferrer":int},
-   			        success: function (data) {
-   			    		document.getElementById("attrRef_dash").innerHTML = int ;
-						attrObj = data.Attractivities;	
-						for (var i=0; i < textTab.length; i++){
-							textTabWithRef2[i] = textTab[i];
-						}
-						for (var obj in attrObj) {
-							for (var i=0; i < textTab.length; i++){
-								if (textTab[i]==obj){
-									textTabWithRef2[i] = textTab[i] + "  Attractivity: " + attrObj[obj];
-								}
-							}
-						}
-						
-						//console.log("text : " + textTabWithRef);
-						drawWith2Ref(textTabWithRef,textTabWithRef2);
-   			    	},
-   			        error: function(err) {
-   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-   			        }
-   		    	});
-			
-			}
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			function drawWith2Ref(tab,tab2){
-				console.log("text : " + tab.concat(tab2));
-				
-				text3 = new Array(tab.length);
-				for ( i =0 ;i<tab2.length;i++){
-				  if(tab[i]!=undefined){
-				     if(tab2[i]!=undefined){
-				      text3[i] = tab[i] +tab2[i];
-				     }else{
-				      text3[i] = tab[i];
-				     }
-				  }else{
-				    if(tab2[i]!=undefined){
-				      text3[i] = tab2[i];
-				    }
-  				  }
-				}
-				console.log(text3) 
-				
-				traceRef = {
-   					x: xTab,
-   	                y: yTab,
-   	                mode: 'markers',
-   	                type: 'scatter',
-   	                text: text3,
-   	                marker: { size: 4 }	
-   				};
-   				
-   				var data = [ traceRef ];
-   				
-   				var layout = {
-   	                title:'GraphPlot'
-   	            };
-
-   	            Plotly.newPlot('myDiv', data, layout);
-   	            myDiv.on('plotly_click', function(data){
-    			var pts = '';
-    			for(var i=0; i < data.points.length; i++){
-    				
-        			pts = text3[xTab.indexOf(data.points[i].x)].charAt(0) + '\n x = '+data.points[i].x +'\ny = '+
-            		data.points[i].y.toPrecision(4) + '\n\n';
-            		applyAttrandSims2(text3[xTab.indexOf(data.points[i].x)].charAt(0)) ;
-            		
-    			}
-    			alert('Closest point clicked:\n\n'+pts);			
-				});
-   	            
-   	            
-			}
-			
-			
-			
-			function drawWithRef(tab){
-				console.log("text : " + tab);
-				
-   				traceRef = {
-   					x: xTab,
-   	                y: yTab,
-   	                mode: 'markers',
-   	                type: 'scatter',
-   	                text: tab,
-   	                marker: { size: 4 }	
-   				};
-   				
-   				var data = [ traceRef ];
-   				
-   				var layout = {
-   	                title:'GraphPlot'
-   	            };
-
-   	            Plotly.newPlot('myDiv', data, layout);
-   	            myDiv.on('plotly_click', function(data){
-    			var pts = '';
-    			for(var i=0; i < data.points.length; i++){
-    				
-        			pts = pointsObj.name[xTab.indexOf(data.points[i].x)].charAt(0) + '\n x = '+data.points[i].x +'\ny = '+
-            		data.points[i].y.toPrecision(4) + '\n\n';
-            		applyAttrandSims2(pointsObj.name[xTab.indexOf(data.points[i].x)].charAt(0)) 
-            		
-    			}
-    			alert('Closest point clicked:\n\n'+pts);			
-				});
-			}
-			
-			function applyLine() {
-				console.log("Testttttt Lineeeeeee");
-				console.log(parseFloat(document.getElementById("line_input").value));
-				$.ajax({
-   			        type:"GET",
-   			        url: "setLine",
-   			        dataType: "json",
-   			        data: {"line":parseFloat(document.getElementById("line_input").value)},
-   			        success: function (data) {
-   			    		document.getElementById("line_dash").innerHTML = "Line :" + data.line;
-   			    	},
-   			        error: function(err) {
-   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-   			        }
-   		    	});
-			}
-			
-			function applyFactor() {
-				$.ajax({
-   			        type:"GET",
-   			        url: "setDec",
-   			        dataType: "json",
-   			        data: {"decFactor":parseFloat(document.getElementById("factor_input").value)},
-   			        success: function (data) {
-   			    		document.getElementById("dec_dash").innerHTML = "Line decreasing factor " + data.decreasingFactor;
-   			    	},
-   			        error: function(err) {
-   			        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
-   			        }
-   		    	});
-			}
-			
-   			function dimSelection() {
-   				var max=xTab.length;
-   				if (flagDim == 0){
-					var option;
-					var sel = document.getElementById("x_select");
-					sel.options.length = 0;
-					for (index = 0; index < max; ++index) {
-			            option = index;
-			            sel.options.add(new Option(option, option));
-			        }
-					sel = document.getElementById("y_select");
-					sel.options.length = 0;
-					for (index = 0; index < max; ++index) {
-			            option = index;
-			            sel.options.add(new Option(option, option));
-			        }
-					flagDim = 1;
-				}
-   				
-   			}				
-   			
-   		</script>
-   		
-   		
+   <body>
+      		
       <p>&nbsp;</p>
       <div class="container-fluid" style="width:90%;margin-left:auto;margin-right:auto">
          <div class="thumbnail">
@@ -490,11 +71,11 @@
                   <h5 id="line_dash">Line:--</h5>
                   <h5 id="dec_dash">Decreasing Line Factor:--</h5>
                </div>
-               <div class="col-md-2">
+               <div class="col-md-1">
                   <h4>Similarities Referrer</h4>
                   <h5 id="simRef_dash">--</h5>
                </div>
-               <div class="col-md-2">
+               <div class="col-md-1">
                   <h4>Attractivities Referrer</h4>
                   <h5 id="attrRef_dash">--</h5>
                </div>
@@ -506,15 +87,23 @@
                </div>
                <div class="col-md-1">
                   <br/>
-                  <button type="button" class="btn btn-default">Previous</button>
+                  <button id="play_button" type="button" class="btn btn-default" onclick="play()">Play</button>
+                  <p>&nbsp;</p>
+                  <button type="button" class="btn btn-default" onclick="previous()">Previous</button><br>
+               </div>
+               <div class="col-md-1">
+                  <br/>
+                  <p>&nbsp;</p>
                   <p>&nbsp;</p>
                   <button id="next_button" type="button" class="btn btn-default" onclick="next()">Next</button><br>
                </div>
                <div class="col-md-1">
-                  <br/>
-                  <button type="button" class="btn btn-default">Load</button>
+                  <label>Choose step:</label>
+                  <input type="number" min="0" class="form-control" id="load_step_input">
+                  <p>&nbsp;</p>
+                  <button type="button" class="btn btn-default" onclick="load()">Load</button>
                   <!--br/>
-                  <input type="checkbox" value="">Anchor this step.</label><br-->
+                  <input type="number" min="0" class="form-control" id="load_step_input"><br-->
                   <p id="test"></p>
                   <p id="test2"></p>
                   <p id="test3"></p>
@@ -562,21 +151,21 @@
                      <h4>Dimensions</h4>
                      <div class="form-group form-inline">
                         <label for="exampleInputName2">X:</label>
-                        <select class="form-control" id="x_select" onclick="dimSelection()">
+                        <select class="form-control" id="x_select" onchange="changeX($ (this))">
                            <option>--</option>
                         </select>
                      </div>
                      <div class="form-group form-inline">
                         <label for="exampleInputName2">Y:</label>
-                        <select class="form-control" id="y_select" onclick="dimSelection()">
+                        <select class="form-control" id="y_select" onchange="changeY($ (this))">
                            <option>--</option>
                         </select>
                      </div>
-                     <button type="button" class="btn btn-default">Apply</button>
+                     <!--  >button type="button" class="btn btn-default">Apply</button-->
                      <p>&nbsp;</p>
                   </div>
                </div>
-               <div class="col-md-4">
+               <!-- div class="col-md-4">
                   <div class="thumbnail" style="min-height:215px;">
                      <h4>Weights</h4>
                      <div class="form-group">
@@ -601,7 +190,7 @@
                         <p>&nbsp;</p>
                      </div>
                   </div>
-               </div>
+               </div-->
                <!--div class="col-md-4">
                   <div class="thumbnail" style="min-height:215px;">
                     <h4>Num Of Steps</h4>
@@ -615,24 +204,8 @@
                     </div>
                   </div>
                   </div-->
-            </div>
-            <div class="row">
-               <!--div class="col-md-4">
-                  <div class="thumbnail" style="min-height:215px;">
-                     <h4>Attractivities</h4>
-                     <div class="form-group">
-                        <div class="form-group form-inline">
-                           <label for="exampleInputName2">Referrer:</label>
-                           <select class="form-control" id="attr_select" onclick="attrSelection()">
-                              <option>--</option>
-                           </select>
-                        </div>
-                        <button type="button" class="btn btn-default" onclick="applyAttrRef()">Apply</button>
-                        <p>&nbsp;</p>
-                     </div>
-                  </div>
-               </div-->
-               <div class="col-md-4">
+                  
+            	<div class="col-md-4">
                   <div class="thumbnail" style="min-height:215px;">
                      <h4>Attractivities & Similarities</h4>
                      <div class="form-group">
@@ -642,9 +215,6 @@
                               <option>--</option>
                            </select>
                         </div>
-                        <button type="button" class="btn btn-default" onclick="applySims()">ShowSimilarities</button>
-                        <button type="button" class="btn btn-default" onclick="applyAttr()">ShowAttractivities</button>
-                        <button type="button" class="btn btn-default" onclick="applyAttrandSims()">ShowAttractivities&Similarities</button>
                         <p>&nbsp;</p>
                      </div>
                   </div>
@@ -668,15 +238,83 @@
                   </div>
                </div>
             </div>
+            <!-- div class="row"-->
+               <!--div class="col-md-4">
+                  <div class="thumbnail" style="min-height:215px;">
+                     <h4>Attractivities</h4>
+                     <div class="form-group">
+                        <div class="form-group form-inline">
+                           <label for="exampleInputName2">Referrer:</label>
+                           <select class="form-control" id="attr_select" onclick="attrSelection()">
+                              <option>--</option>
+                           </select>
+                        </div>
+                        <button type="button" class="btn btn-default" onclick="applyAttrRef()">Apply</button>
+                        <p>&nbsp;</p>
+                     </div>
+                  </div>
+               </div-->
+               
+            <!--  /div-->
             <p>&nbsp;</p>
          </div>
       </div>
+      
+      <!-- div id="one">
+      	<style type="text/css">
+        	div[id=one] { background: #f4f7f8 !important; } /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
+    	</style>
+      	 <div class="container-fluid" style="width:60%">
+	       <p>&nbsp;</p>
+	       <p>&nbsp;</p>
+	       <div class="row-md-1">
+               <label for="exampleInputName2">Choose database:</label>
+               <select id="database" class="form-control" onclick="getInitAjax()">
+                  <option>Please choose an option.</option>
+               </select>
+	       </div>
+	       <p>&nbsp;</p>
+	         <div class="row-md-1">
+	            <label for="exampleInputName2">Choose collection:</label>
+	            <select id="collection" class="form-control">
+	               <option id='op2'>Please choose an option.</option>
+	            </select>
+	         </div>
+	         <p>&nbsp;</p>
+	         <div class="row-md-1">
+	            <label for="exampleInputName2">Choose nbDims:</label>
+	            <select id="nbdims" class="form-control">
+	               <option id='op3'>Please choose an option.</option>
+	            </select>
+	         </div>
+	         <p>&nbsp;</p>
+	         <button id="button1" type="button" class="btn btn-default" onclick="setInitAjax()">Initiate model</button>
+	         <p>&nbsp;</p><p>&nbsp;</p>
+	         <p>PS: If only one value is available, it means it's the default value of the system.</p>
+	         <p>&nbsp;</p>
+	         <p>&nbsp;</p>
+	       </div>
+      	</div -->
    </body>
 
    <script>
     $( document ).ready(function() {
-      window.open('init.html','Initiate your model','width=50,heigth=50');
+    	/*var overlay = jQuery('<div id="overlay"><div id="one">'+ 
+    		'<style type="text/css">div[id=one] { background: #f4f7f8 !important; }</style>'+
+          	 '<div class="container-fluid" style="width:60%"> <p>&nbsp;</p> <p>&nbsp;</p>'+
+    	       '<div class="row-md-1"> <label for="exampleInputName2">Choose database:</label> <select id="database" class="form-control" onclick="getInitAjax()">'+
+                      '<option>Please choose an option.</option> </select></div> <p>&nbsp;</p>'+
+    	         '<div class="row-md-1"><label for="exampleInputName2">Choose collection:</label><select id="collection" class="form-control"><option id="op2">Please choose an option.</option>'+
+    	            '</select></div><p>&nbsp;</p><div class="row-md-1"><label for="exampleInputName2">Choose nbDims:</label><select id="nbdims" class="form-control">'+
+    	               '<option id="op3">Please choose an option.</option></select></div><p>&nbsp;</p><button id="button1" type="button" class="btn btn-default" onclick="setInitAjax()">Initiate model</button>'+
+    	         '<p>&nbsp;</p><p>&nbsp;</p><p>PS: If only one value is available, it means its the default value of the system.</p><p>&nbsp;</p><p>&nbsp;</p>'+
+    	       '</div></div></div>');
+    	overlay.appendTo(document.body)*/
+      //if (e.target.className === $(this).attr('class')) return $(this).trigger('hide');
+      //window.open('init.html','Initiate your model','width=50,heigth=50');
+      getAjaxInit();
+      	
     });
-</script>
+   </script>
 
 </html>

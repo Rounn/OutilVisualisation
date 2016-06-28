@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -82,21 +83,42 @@ public class Step {
 	}
 
 	public void load(String path) throws IOException, JSONException {
-		JSONObject obj = new JSONObject(this.readFile(path));
+		JSONObject obj = new JSONObject(this.readFile(this.uri + "Step"+path+".json"));
+		
+		//id
+		this.id=obj.getInt("id");
+		
+		//totalDims
+		int max = obj.getJSONObject("dimensions").getInt("totalDimensions");
 
 		//Nbr steps
-		this.ns.setSteps(obj.getInt("nbrSteps"));
+		this.ns.setSteps(Integer.parseInt(obj.getJSONObject("nbrSteps").getString("nbrSteps")));
 
 		//Embeddings
 		JSONObject jsonPoints = obj.getJSONObject("points");
+		JSONArray names = jsonPoints.getJSONArray("name");
+		int nbPoints = jsonPoints.getJSONArray("name").length();
 		HashMap<String, float[]> embs = new HashMap<String, float[]>();
-		Iterator<?> keys = jsonPoints.keys();
+		
+		for (int i = 0; i<nbPoints; i++) {
+			float[] embedding = new float[max];
+			for (int j=0; j<max; j++) {
+				JSONArray coord = jsonPoints.getJSONArray(Integer.toString(j));
+				embedding[j] = (float) coord.getDouble(i);
+			}
+			embs.put(names.getString(i), embedding);
+			
+		}
+		this.points.addPoints(embs);
+		/*Iterator<?> keys = jsonPoints.keys();
 		while( keys.hasNext() ) {
 			String key = (String)keys.next();
 			if ( jsonPoints.get(key) instanceof JSONObject ) {
 				embs.put(key, (float[]) jsonPoints.get(key));
 			}
-		}
+		}*/
+		
+		
 
 		//Dimensions
 		this.dims.setX(obj.getJSONObject("dimensions").getInt("x"));

@@ -52,19 +52,33 @@ public class Points {
 	}
 	
 	public JSONObject toJSON() throws JSONException {
+		Dimensions dims = Dimensions.getInstance();
+		
 		JSONObject jsonPoints = new JSONObject();
-		JSONArray x = new JSONArray();
-		JSONArray y = new JSONArray();
+		//JSONArray x = new JSONArray();
+		//JSONArray y = new JSONArray();
 		JSONArray name = new JSONArray();
 		
+		// Get embeddings names
 		for(Entry<String, float[]> entry : this.embeddings.entrySet()) {
 			name.put(entry.getKey());
-			x.put(entry.getValue()[0]);
-			y.put(entry.getValue()[1]);
+			//x.put(entry.getValue()[0]);
+			//y.put(entry.getValue()[1]);
 		}
-		jsonPoints.put("x", x);
-		jsonPoints.put("y", y);
 		jsonPoints.put("name", name);
+		
+		// Get embeddings coordonates
+		for (int i=0; i < dims.getTotalDimensions(); i++) {
+			JSONArray coord = new JSONArray();
+			for(Entry<String, float[]> entry : this.embeddings.entrySet()) {
+				coord.put(entry.getValue()[i]);
+			}
+			jsonPoints.put(Integer.toString(i), coord);
+		}
+		
+		//jsonPoints.put("x", x);
+		//jsonPoints.put("y", y);
+		
 		/*for(Entry<String, float[]> entry : this.embeddings.entrySet()) {
 			jsonPoints.put(entry.getKey(), entry.getValue());
 		}*/

@@ -251,6 +251,15 @@
   </servlet-mapping>
   
   <servlet>
+    <servlet-name>load</servlet-name>
+    <servlet-class>servlets.optionsServlets.LoadStepServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>load</servlet-name>
+    <url-pattern>/load</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
     <servlet-name>pause</servlet-name>
     <servlet-class>servlets.timelineServlets.PauseServlet</servlet-class>
   </servlet>

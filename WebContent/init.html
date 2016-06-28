@@ -23,29 +23,64 @@
     </style>
 
     <script>
-    var flag = 0;
+    
+    $(document).ready(function() {
+        $("#div_coll").hide();
+        $("#div_dims").hide();
+      });
+    
+    var flag = 0; var myData; 
     
     function getAjax() {
-    	//document.getElementById("demo").innerHTML = "Send ok";
     	if (flag == 0) {
 		    $.ajax({
 		        type:"GET",
 		        url: "getModelOptions",
 		        dataType: "json",
 		        success: function (data) {
-		    		//document.getElementById("demo").innerHTML = "AJAX YESSSS";
 		    		parse(data);
 		    	},
-		        	/*function(data) {
-		          document.getElementById("demo").innerHTML = "YESSSS";
-		          alert(data);
-		        },*/
 		        error: function(err) {
 		        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
 		        }
 	    	});
 		    flag = 1;
+    	}
+    }
+    
+    function parse2 (data) {
+    	myData = data;
+    	var option;
+    	var dbselect = document.getElementById('database');
+    	dbselect.options.length = 0;
+    	for (index = 0; index < data.database.length; ++index) {
+            option = data.database[index];
+            dbselect.options.add(new Option(option, option));
+        }
+	}
+    
+    function change() {
+    	//var count = Object.keys(myData).length;
+    	 var containerDiv = $('#container');
+    	for (key in myData) {
+    		var attrName = key;
+    		var attrValue = myData[key];
+    		var str = '<label>Choose '+attrName+':</label>';
+    		if (attrValue.length == 1){
+    			str = str + '<input type="text" id="'+attrName+'" value="" placeholder="'+attrName+'"/>';
+    		} else {
+    			str = str + '<select id="'+attrName+'" class="form-control">;
+    			for (index = 0; index < attrValue.length; ++index) {
+    				str = str + '<option value = >
+    			}
+    			str = str + '</select>';
     		}
+    		
+    		$('<label>Choose '+attrName+':</label>'<select id="database" class="form-control" onclick="getAjax()">
+    				<p><label for="p_scnts"><input type="text" id="p_scnt" size="20" name="p_scnt_' + 
+    				i +'" value="" placeholder="Input Value" /></label> <a href="#" id="remScnt">Remove</a></p>').appendTo(scntDiv);
+    		
+    	}
     }
     
     function parse (data) {
@@ -53,24 +88,31 @@
     	//var obj = JSON.parse(data);
     	//document.getElementById("demo2").innerHTML = data.nbDims[0];
     	var option;
+    	myData = data;
     	var dbselect = document.getElementById('database');
         var collselect = document.getElementById('collection');
         var dimsselect = document.getElementById('nbdims');
         dbselect.options.length = 0;
-        collselect.options.length = 0;
-        dimsselect.options.length = 0;
-        for (index = 0; index < data.database.length; ++index) {
+        //collselect.options.length = 0;
+        //dimsselect.options.length = 0;
+		for (index = 0; index < data.database.length; ++index) {
             option = data.database[index];
             dbselect.options.add(new Option(option, option));
         }
-        for (index = 0; index < data.collection.length; ++index) {
+		var myForm;
+    	for (i=1; i<data.length; i++) {
+    		console.log("text : ");
+    		myForm = jQuery('<p>&nbsp;</p> <div class="row-md-1"> <label >Choose meeee:</label></div>'); 
+    		myForm.appendTo($("#myForm"));
+    	}
+        /*for (index = 0; index < data.collection.length; ++index) {
             option = data.collection[index];
             collselect.options.add(new Option(option, option));
         }
         for (index = 0; index < data.nbDims.length; ++index) {
             option = data.nbDims[index];
             dimsselect.options.add(new Option(option, option));
-        }
+        }*/
     }
     
     function setAjax() {
@@ -97,6 +139,17 @@
 	        }
     	});
 	}
+    
+    /*function showForm() {
+    	var myForm;
+    	for (i=0; i<myData.length; i++) {
+    		console.log("text : ");
+    		myForm = jQuery('<p>&nbsp;</p> <div class="row-md-1"> <label >Choose meeee:</label></div>'); 
+    		myForm.appendTo($("#myForm"));
+    	}
+    	
+    	
+    }*/
     	
     </script>
 
@@ -109,24 +162,25 @@
                   <option>Please choose an option.</option>
                </select>
        </div>
-       <p>&nbsp;</p>
-            <div class="row-md-1">
+       <div id="container"></div>
+       <!-- p>&nbsp;</p>
+            <div class="row-md-1" id="div_coll">
                <label for="exampleInputName2">Choose collection:</label>
                <select id="collection" class="form-control">
                   <option id='op2'>Please choose an option.</option>
                </select>
             </div>
             <p>&nbsp;</p>
-            <div class="row-md-1">
+            <div class="row-md-1" id="div_dims">
                <label for="exampleInputName2">Choose nbDims:</label>
                <select id="nbdims" class="form-control">
                   <option id='op3'>Please choose an option.</option>
                </select>
-            </div>
+            </div-->
             <p>&nbsp;</p>
             <button id="button1" type="button" class="btn btn-default" onclick="setAjax()">Initiate model</button>
             <p>&nbsp;</p><p>&nbsp;</p>
-            <p>PS: If only one value is available, it means it's the dafault value of the system.</p>
+            <p>PS: If only one value is available, it means it s the default value of the system.</p>
             <p>&nbsp;</p>
             <p>&nbsp;</p>
        </div>

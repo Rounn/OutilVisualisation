@@ -21,22 +21,18 @@ public class LoadStepServlet extends HttpServlet{
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		@SuppressWarnings("unchecked")
 		Map <String, String[]> pars = req.getParameterMap();
-		resp.getWriter().println("<HTML><BODY>");
+		resp.setContentType("application/json");
 		JSONObject obj;
 		
-		if (pars.containsKey("path")) {
-			String path =req.getParameter("path"); 
+		if (pars.containsKey("name")) {
+			String path =req.getParameter("name"); 
 			try {
 				obj = services.TimelineServices.load(path);
-				resp.getWriter().println(obj.toString());
+				resp.getWriter().print(obj.toString());
+				resp.getWriter().close();
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 		}
-		
-		
-		
-		
-		resp.getWriter().println("</BODY></HTML>");
 	}
 }

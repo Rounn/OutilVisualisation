@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <!-- jquery -->
+      <script src="https://code.jquery.com/jquery-1.12.3.min.js"
+         integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+         integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+      <!-- Optional theme -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+         integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+      <!-- Latest compiled and minified JavaScript -->
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+      <!-- Plotly -->
+      <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+   </head>
+
+   <body>
+
+    <style type="text/css">
+        body { background: #f4f7f8 !important; }
+    </style>
+
+    <script>
+    	var flag = 0; var options = []; var choices = new Object();
+    	$(document).ready(function() {
+            getAjax();
+        });
+    	
+    	function getAjax() {
+        	if (flag == 0) {
+    		    $.ajax({
+    		        type:"GET",
+    		        url: "getModelOptions",
+    		        dataType: "json",
+    		        success: function (data) {
+    		    		parse(data);
+    		    	},
+    		        error: function(err) {
+    		        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+    		        }
+    	    	});
+    		    flag = 1;
+        	}
+        }
+    	
+    	function parse(data) {
+    		var i=0;
+    		$(document.body).append('<div class="container-fluid" style="width:60%" id="container"> <style type="text/css"> body { background: #f4f7f8 !important; }</style><p>&nbsp;</p> <p>&nbsp;</p> </div>');
+    		for (key in data) {
+        		var attrName = key;
+        		console.log(attrName);
+        		options[i] = attrName;
+        		var attrValue = data[key];
+        		console.log(attrValue);
+        		var str = "#field_"+i;
+        		choices[attrName]=attrValue[0];
+        		console.log(choices);
+        		if (attrValue.length == 1) {
+        			$("#container").append('<div class="row-md-1"><label>Choose '+attrName+':</label><input type="text" class="form-control" id="'+attrName+'" value="'+attrValue+'" placeholder="'+attrValue+'" onchange="setTextChoice($(this))"/></div> <p>&nbsp;</p>');
+        		} else {
+        			var sel = '<div class="row-md-1"><label for="exampleInputName2">Choose '+attrName+':</label><select id="'+attrName+'" class="form-control" onchange="setTextChoice($(this))">';
+        			for (j=0; j<attrValue.length; j++) {
+        				sel = sel + '<option value='+attrValue[j]+'>'+attrValue[j]+'</option>';
+        			}
+        			sel = sel + '</select></div><p>&nbsp;</p>';
+        			$("#container").append(sel);
+        		}
+        		i++;
+    		}
+    		$('#container').append('<button id="button1" type="button" class="btn btn-default" onclick="setAjax()">Initiate model</button><p>&nbsp;</p><p>&nbsp;</p>');
+    		$('#container').append('<p>PS: For text fields, please make sure to insert a value.</p><p>&nbsp;</p><p>&nbsp;</p>');
+    	}
+    	
+    	function setTextChoice (elmnt) {
+    		var id = elmnt.attr('id');
+    		var val = elmnt.val();
+    		choices[id]=val;
+    		console.log(choices);
+    	}
+    	
+    	function setAjax (){
+    		$.ajax({
+    	        type:"GET",
+    	        url: "setModelOptions",
+    	        data: choices,
+    	        dataType: "json",
+    	        success: function (data) {
+    	        	
+    	    	},
+    	        error: function(err) {
+    	        	console.log("AJAX error in request: " + JSON.stringify(err, null, 2));
+    	        }
+        	});    		
+    	}
+    </script>
+    
+     
+
+
+
+
+   </body>
+</html>
